@@ -16,7 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MetroStationActivity" />
+        <activity android:name=".MetroStationsActivity" />
         <activity android:name=".LandmarksActivity" />
         <activity android:name=".LandmarkDetailActivity"></activity>
     </application>

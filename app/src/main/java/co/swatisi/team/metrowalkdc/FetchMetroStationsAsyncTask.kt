@@ -14,15 +14,13 @@ object FetchMetroStationsAsyncTask {
     private const val METRO_API_TOKEN = "372279dd0fae484ea9c426f476031703"
     private const val TAG = "FetchMetroStations"
 
-    fun getStationList(context: Context): JsonObject? {
-        try {
-            return Ion.with(context).load(METRO_API)
-                    .addHeader("api-key", METRO_API_TOKEN)
-                    .asJsonObject().get()
-        } catch (e: Exception) {
-            Log.e(TAG, e.message)
-            return null
-        }
+    fun getStationList(context: Context): JsonObject? = try {
+        Ion.with(context).load(METRO_API)
+                .addHeader("api_key", METRO_API_TOKEN)
+                .asJsonObject().get()
+    } catch (e: Exception) {
+        Log.e(TAG, e.message)
+        null
     }
 }
 

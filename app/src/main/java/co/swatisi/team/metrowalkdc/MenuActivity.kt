@@ -1,9 +1,10 @@
 package co.swatisi.team.metrowalkdc
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_menu.*
+import kotlinx.android.synthetic.main.activity_metro_stations.*
 
 class MenuActivity : AppCompatActivity() {
 
@@ -11,10 +12,13 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
-        val testJsonObject = FetchMetroStationsAsyncTask.getStationList(this)
+        // Get the metro stations
+        FetchMetroStationsAsyncTask.getStationList(this)
 
-        testJsonObject?.let {
-            test_json_text.text = testJsonObject.toString()
+        stations_button.setOnClickListener {
+            val intent = Intent(this, MetroStationsActivity::class.java)
+            startActivity(intent)
         }
+
   }
 }

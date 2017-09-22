@@ -2,7 +2,10 @@ package co.swatisi.team.metrowalkdc
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import kotlinx.android.synthetic.main.activity_landmarks.*
+
+private const val TAG = "LandmarksActivity"
 
 class LandmarksActivity : AppCompatActivity() {
 
@@ -19,11 +22,9 @@ class LandmarksActivity : AppCompatActivity() {
 
         // Start the location updates
         if (!requestingLocationUpdates) {
-            locationDetector.startLocationUpdates()
+            locationDetector.startLocationUpdates(this)
             requestingLocationUpdates = true
         }
-
-        test_location_text.text = locationDetector.getLastLocation(this).toString()
     }
 
     override fun onPause() {

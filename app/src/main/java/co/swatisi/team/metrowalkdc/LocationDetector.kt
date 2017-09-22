@@ -2,17 +2,13 @@ package co.swatisi.team.metrowalkdc
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.support.annotation.NonNull
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.location.*
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 
 
 /**
@@ -26,12 +22,12 @@ class LocationDetector {
     // NOTES: request location updates, timeout after 10 seconds and fall back on last known location,
     // if it exists…..otherwise fail
 
-    private lateinit var fusedLocationClient : FusedLocationProviderClient
+    private var fusedLocationClient : FusedLocationProviderClient? = null
     private lateinit var locationRequest: LocationRequest
     private var locationCallback: LocationCallback? = null
-    private lateinit var lastLocation: Location
+    private var lastLocation: Location? = null
 
-    fun startLocationUpdates() {
+    fun startLocationUpdates(context: Activity) {
         // Create the location request and set properties
         locationRequest = LocationRequest().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -46,10 +42,22 @@ class LocationDetector {
         // Check if the current location settings are satisfied
 //        val settingsClient = LocationServices.getSettingsClient(context)
 //        settingsClient.checkLocationSettings(locationSettingsRequest)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                val location = locationResult?.locations?.find { location -> location != null }
+                location?.let {
+                    Log.d(TAG, location.toString())
+                }
+            }
+        }
     }
 
     fun stopLocationUpdates() {
-        fusedLocationClient.removeLocationUpdates(locationCallback);
+
+        fusedLocationClient?.removeLocationUpdates(locationCallback);
     }
 
     fun getLastLocation(context: Activity) {
@@ -63,16 +71,7 @@ class LocationDetector {
 
         // TODO: define accept and reject scenarios for runtime permission check
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                val location = locationResult?.locations?.find { location -> location != null }
-                location?.let {
-                    Toast(context).setText(location.toString())
-                }
-            }
-        }
     }
 
 

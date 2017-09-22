@@ -23,7 +23,7 @@ class MetroStationsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_metro_stations)
 
         // Check if we have the metro station data
-        StationData.stationList()?.let {
+        if(StationData.stationList().isEmpty()) {
             FetchMetroStationsAsyncTask.getStationList(this)
         }
 

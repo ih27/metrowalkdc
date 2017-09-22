@@ -20,5 +20,10 @@ class MenuActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        closest_station_button.setOnClickListener {
+            val intent = Intent(this, LandmarksActivity::class.java)
+            startActivity(intent)
+        }
+
   }
 }

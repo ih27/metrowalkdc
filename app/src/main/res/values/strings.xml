@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MetroWalkDC</string>
     <string name="metro_stations">Metro Stations</string>
+    <string name="closest_station">Closest Station</string>
 </resources>

@@ -4,17 +4,16 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import com.google.android.gms.location.LocationRequest
+import android.location.Location
 import android.support.annotation.NonNull
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
+import android.widget.Toast
+import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.SettingsClient
+
 
 /**
  * Created by ihasanov on 9/19/17.
@@ -29,21 +28,28 @@ class LocationDetector {
 
     private lateinit var fusedLocationClient : FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
+    private var locationCallback: LocationCallback? = null
+    private lateinit var lastLocation: Location
 
-    fun startLocationUpdates(context: Context) {
+    fun startLocationUpdates() {
         // Create the location request and set properties
-        locationRequest = LocationRequest()
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 10000 // 10 secs
-        locationRequest.fastestInterval = 3000 // 3 secs
+        locationRequest = LocationRequest().apply {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 10000 // 10 secs
+            fastestInterval = 3000 // 3 secs
+        }
+
 
         // Create LocationSettingsRequest object using location request
-        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
-        val locationSettingsRequest = builder.build()
+        LocationSettingsRequest.Builder().addLocationRequest(locationRequest).build()
 
         // Check if the current location settings are satisfied
-        val settingsClient = LocationServices.getSettingsClient(context)
-        settingsClient.checkLocationSettings(locationSettingsRequest)
+//        val settingsClient = LocationServices.getSettingsClient(context)
+//        settingsClient.checkLocationSettings(locationSettingsRequest)
+    }
+
+    fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
     fun getLastLocation(context: Activity) {
@@ -52,25 +58,23 @@ class LocationDetector {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(context,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
         }
 
         // TODO: define accept and reject scenarios for runtime permission check
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(OnSuccessListener<Any> { location ->
-                    // GPS location can be null if GPS is switched off
-                    if (location != null) {
-                        onLocationChanged(location)
-                    }
-                })
-                .addOnFailureListener(OnFailureListener { e ->
-                    Log.d(TAG, "Error trying to get last GPS location")
-                    e.printStackTrace()
-                })
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                val location = locationResult?.locations?.find { location -> location != null }
+                location?.let {
+                    Toast(context).setText(location.toString())
+                }
+            }
+        }
     }
 
-    private fun onLocationChanged(location: Any?) {}
+
 }
 

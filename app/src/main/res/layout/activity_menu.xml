@@ -8,6 +8,12 @@
     tools:context="co.swatisi.team.metrowalkdc.MenuActivity">
 
     <Button
+        android:id="@+id/closest_station_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/closest_station"/>
+
+    <Button
         android:id="@+id/stations_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

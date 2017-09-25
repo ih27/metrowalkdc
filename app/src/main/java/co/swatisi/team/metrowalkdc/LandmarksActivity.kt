@@ -1,36 +1,48 @@
 package co.swatisi.team.metrowalkdc
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.location.Location
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import kotlinx.android.synthetic.main.activity_landmarks.*
 
 private const val TAG = "LandmarksActivity"
+private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
 
-class LandmarksActivity : AppCompatActivity() {
+class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
     private var fusedLocationClient: FusedLocationProviderClient? = null
-    private var requestingLocationUpdates = true
     private var selectedLocation: Location? = null
+    private var requestingLocationUpdates = true
+    private var locationPermissionGranted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landmarks)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        LocationDetector.startLocationUpdates(this, fusedLocationClient)
-        requestingLocationUpdates = true
+        // Get the required runtime location permission
+        getLocationPermission()
 
-        // TODO: Show ProgressDialog and then get the last location
+        if (locationPermissionGranted) {
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            LocationDetector.startLocationUpdates(fusedLocationClient)
+            requestingLocationUpdates = true
 
-        selectedLocation = LocationDetector.getLastLocation()
+            // TODO: Show ProgressDialog and then get the last location
 
-        Log.d(TAG, selectedLocation.toString())
+            selectedLocation = LocationDetector.getLastLocation()
 
-        FetchLandmarksAsyncTask.getLandmarksList(this, selectedLocation)
+            Log.d(TAG, selectedLocation.toString())
+
+            FetchLandmarksAsyncTask.getLandmarksList(this, selectedLocation)
+        } else {
+            Log.d(TAG, "The permission is not granted.")
+        }
     }
 
     override fun onResume() {
@@ -38,13 +50,8 @@ class LandmarksActivity : AppCompatActivity() {
 
         // Start the location updates
         if (!requestingLocationUpdates) {
-            LocationDetector.startLocationUpdates(this, fusedLocationClient)
+            LocationDetector.startLocationUpdates(fusedLocationClient)
             requestingLocationUpdates = true
-            selectedLocation = LocationDetector.getLastLocation()
-
-            Log.d(TAG, selectedLocation.toString())
-
-            FetchLandmarksAsyncTask.getLandmarksList(this, selectedLocation)
         }
     }
 
@@ -55,6 +62,29 @@ class LandmarksActivity : AppCompatActivity() {
         if (requestingLocationUpdates) {
             LocationDetector.stopLocationUpdates(fusedLocationClient)
             requestingLocationUpdates = false
+        }
+    }
+
+    private fun getLocationPermission() {
+        /*  The result of the runtime permission request is handled by a callback,
+            onRequestPermissionsResult */
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted = true
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
+        }
+    }
+
+    // Location runtime permission flag is adjusted based on the user action
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+                                             grantResults: IntArray) {
+        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+            // Kotlin short if statement
+            locationPermissionGranted = grantResults.isNotEmpty() &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED
         }
     }
 }

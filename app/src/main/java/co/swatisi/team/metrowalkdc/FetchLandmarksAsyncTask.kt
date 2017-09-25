@@ -2,10 +2,8 @@ package co.swatisi.team.metrowalkdc
 
 import android.content.Context
 import android.location.Location
-import android.provider.MediaStore.Video.VideoColumns.CATEGORY
 import android.util.Log
 import android.widget.Toast
-import co.swatisi.team.metrowalkdc.model.StationData
 import com.koushikdutta.ion.Ion
 
 /**
@@ -26,18 +24,19 @@ object FetchLandmarksAsyncTask {
 
 
     fun getLandmarksList(context: Context, location: Location?) = try {
-        Log.d(TAG, "Before API call: ${location.toString()}")
-        val jsonLandmarks = Ion.with(context).load(YELP_API)
-                .addHeader("Authorization", YELP_API_TOKEN)
-                .addQuery("latitude", location?.latitude.toString())
-                .addQuery("longitude", location?.longitude.toString())
-                .addQuery("radius", RADIUS)
-                .addQuery("categories", CATEGORY)
-                .addQuery("sort_by", SORT_BY)
-                .asJsonObject().get()
-        jsonLandmarks?.let {
-            Toast.makeText(context, jsonLandmarks.asString, Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "Landmarks List Received.")
+        location?.let {
+            val jsonLandmarks = Ion.with(context).load(YELP_API)
+                    .addHeader("Authorization", YELP_API_TOKEN)
+                    .addQuery("latitude", location.latitude.toString())
+                    .addQuery("longitude", location.longitude.toString())
+                    .addQuery("radius", RADIUS)
+                    .addQuery("categories", CATEGORY)
+                    .addQuery("sort_by", SORT_BY)
+                    .asJsonObject().get()
+            jsonLandmarks?.let {
+                Toast.makeText(context, jsonLandmarks.toString(), Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "Landmarks List Received.")
+            }
         }
     } catch (e: Exception) {
         Log.e(TAG, e.message)

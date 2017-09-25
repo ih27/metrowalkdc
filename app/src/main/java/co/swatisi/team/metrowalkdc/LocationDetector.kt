@@ -1,36 +1,21 @@
 package co.swatisi.team.metrowalkdc
 
-import android.Manifest
-import android.app.Activity
-import android.content.AsyncTaskLoader
-import android.content.Context
-import android.content.pm.PackageManager
 import android.location.Location
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.util.Log
-import android.widget.Toast
-import com.google.android.gms.common.api.Result
 import com.google.android.gms.location.*
-import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.OnSuccessListener
 
 
-/**
- * Created by ihasanov on 9/19/17.
- */
 
 private const val TAG = "LocationDetector"
 
 object LocationDetector {
 
-    // NOTES: request location updates, timeout after 10 seconds and fall back on last known location,
-    // if it exists…..otherwise fail
-
     private lateinit var locationRequest: LocationRequest
     private var locationCallback: LocationCallback? = null
     private var lastLocation: Location? = null
 
-    fun startLocationUpdates(context: Activity, fusedLocationClient: FusedLocationProviderClient?) {
+    fun startLocationUpdates(fusedLocationClient: FusedLocationProviderClient?) {
         // Create the location request and set properties
         locationRequest = LocationRequest().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -38,14 +23,7 @@ object LocationDetector {
             fastestInterval = 3000 // 3 secs
         }
 
-
-        // Create LocationSettingsRequest object using location request
-        // LocationSettingsRequest.Builder().addLocationRequest(locationRequest).build()
-
-        // Check if the current location settings are satisfied
-//        val settingsClient = LocationServices.getSettingsClient(context)
-//        settingsClient.checkLocationSettings(locationSettingsRequest)
-
+        // Define location callback object
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 val location = locationResult?.locations?.find { location -> location != null }
@@ -56,30 +34,31 @@ object LocationDetector {
             }
         }
 
-        // Runtime permissions check
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(context,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
-        }
-
-        // TODO: define accept and reject scenarios for runtime permission check
-
-        fusedLocationClient?.requestLocationUpdates(locationRequest, locationCallback, null /* Looper */)
-        val locationResult = fusedLocationClient?.lastLocation
-        locationResult?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                lastLocation = locationResult.result
-            } else {
-                Log.d(TAG, "Current location is null.")
-                Log.e(TAG, "Exception: %s", task.exception)
+        // Try to get the location updates after getting last location
+        try {
+            fusedLocationClient?.lastLocation?.addOnSuccessListener { location ->
+                if (location != null) {
+                    lastLocation = location
+                }
             }
+
+            fusedLocationClient?.requestLocationUpdates(locationRequest, locationCallback, null)
+            val locationResult = fusedLocationClient?.lastLocation
+            locationResult?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    lastLocation = locationResult.result
+                } else {
+                    Log.d(TAG, "Last location is null.")
+                    Log.e(TAG, "Task Exception: %s", task.exception)
+                }
+            }
+        } catch (e: SecurityException) {
+            Log.e(TAG,"Security Exception: %s", e.cause)
         }
     }
 
     fun stopLocationUpdates(fusedLocationClient: FusedLocationProviderClient?) {
-
-        fusedLocationClient?.removeLocationUpdates(locationCallback);
+        fusedLocationClient?.removeLocationUpdates(locationCallback)
     }
 
     fun getLastLocation(): Location? {

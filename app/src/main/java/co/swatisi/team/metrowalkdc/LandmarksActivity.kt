@@ -80,7 +80,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
     // Location runtime permission flag is adjusted based on the user action
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                                             grantResults: IntArray) {
+                                            grantResults: IntArray) {
         if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
             // Kotlin short if statement
             locationPermissionGranted = grantResults.isNotEmpty() &&

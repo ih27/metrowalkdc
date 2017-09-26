@@ -1,21 +1,24 @@
 package co.swatisi.team.metrowalkdc
 
+import android.content.Context
 import android.location.Location
 import android.util.Log
 import com.google.android.gms.location.*
-import com.google.android.gms.tasks.OnSuccessListener
 
-
-
-private const val TAG = "LocationDetector"
-
-object LocationDetector {
-
+class LocationDetector(val context: Context, val fusedLocationClient: FusedLocationProviderClient?) {
+    private val TAG = "LocationDetector"
     private lateinit var locationRequest: LocationRequest
     private var locationCallback: LocationCallback? = null
     private var lastLocation: Location? = null
 
-    fun startLocationUpdates(fusedLocationClient: FusedLocationProviderClient?) {
+    var locationCompletionListener: LocationCompletionListener? = null
+
+    interface LocationCompletionListener {
+        fun locationKnown()
+        fun locationUnknown()
+    }
+
+    fun startLocationUpdates() {
         // Create the location request and set properties
         locationRequest = LocationRequest().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -29,35 +32,33 @@ object LocationDetector {
                 val location = locationResult?.locations?.find { location -> location != null }
                 location?.let {
                     lastLocation = location
-                    Log.d(TAG, location.toString())
                 }
             }
         }
 
-        // Try to get the location updates after getting last location
+        // Try to get the location updates
         try {
-            fusedLocationClient?.lastLocation?.addOnSuccessListener { location ->
-                if (location != null) {
-                    lastLocation = location
-                }
-            }
-
             fusedLocationClient?.requestLocationUpdates(locationRequest, locationCallback, null)
             val locationResult = fusedLocationClient?.lastLocation
             locationResult?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     lastLocation = locationResult.result
+                    // Success - Location available
+                    locationCompletionListener?.locationKnown()
                 } else {
-                    Log.d(TAG, "Last location is null.")
-                    Log.e(TAG, "Task Exception: %s", task.exception)
+                    // Fail - No location available
+                    locationCompletionListener?.locationUnknown()
+                    Log.e(TAG, "Task Exception: %${task.exception}")
                 }
             }
         } catch (e: SecurityException) {
-            Log.e(TAG,"Security Exception: %s", e.cause)
+            // Fail - No location available
+            locationCompletionListener?.locationUnknown()
+            Log.e(TAG,"Security Exception: ${e.cause}")
         }
     }
 
-    fun stopLocationUpdates(fusedLocationClient: FusedLocationProviderClient?) {
+    fun stopLocationUpdates() {
         fusedLocationClient?.removeLocationUpdates(locationCallback)
     }
 

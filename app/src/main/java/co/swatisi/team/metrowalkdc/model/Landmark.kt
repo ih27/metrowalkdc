@@ -1,10 +1,6 @@
 package co.swatisi.team.metrowalkdc.model
 
-import android.net.Uri
+import java.net.URL
 
-/**
- * Created by ihasanov on 9/25/17.
- */
-
-data class Landmark(val name: String, val imageURL: Uri, val displayAddress: String,
+data class Landmark(val name: String, val imageURL: URL, val displayAddress: String,
                     val lat: Float, val lon: Float, val distance: Float)

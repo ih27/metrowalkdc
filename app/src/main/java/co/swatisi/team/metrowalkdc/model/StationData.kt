@@ -3,10 +3,6 @@ package co.swatisi.team.metrowalkdc.model
 import com.google.gson.JsonObject
 import java.util.ArrayList
 
-/**
- * Created by ihasanov on 9/20/17.
- */
-
 object StationData {
 
     private const val TAG = "StationData"

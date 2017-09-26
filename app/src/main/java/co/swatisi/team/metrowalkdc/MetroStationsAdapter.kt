@@ -1,6 +1,5 @@
 package co.swatisi.team.metrowalkdc
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +7,6 @@ import android.view.ViewGroup
 import co.swatisi.team.metrowalkdc.model.StationData
 import kotlinx.android.synthetic.main.row_stations.view.*
 
-/**
- * Created by ihasanov on 9/19/17.
- */
 class MetroStationsAdapter : RecyclerView.Adapter<MetroStationsAdapter.ViewHolder>() {
 
     lateinit var itemClickListener: OnItemClickListener

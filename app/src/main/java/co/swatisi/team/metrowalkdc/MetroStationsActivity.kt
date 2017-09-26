@@ -9,12 +9,11 @@ import kotlinx.android.synthetic.main.activity_metro_stations.*
 
 class MetroStationsActivity : AppCompatActivity() {
 
-    lateinit private var staggeredLayoutManager: StaggeredGridLayoutManager
-    lateinit private var adapter: MetroStationsAdapter
+    private lateinit var staggeredLayoutManager: StaggeredGridLayoutManager
+    private lateinit var adapter: MetroStationsAdapter
 
     private val onItemClickListener = object : MetroStationsAdapter.OnItemClickListener {
         override fun onItemClick(view: View, position: Int) {
-
         }
     }
 
@@ -24,7 +23,7 @@ class MetroStationsActivity : AppCompatActivity() {
 
         // Check if we have the metro station data
         if(StationData.stationList().isEmpty()) {
-            FetchMetroStationsAsyncTask.getStationList(this)
+            FetchMetroStationsManager.getStationList(this)
         }
 
         staggeredLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)

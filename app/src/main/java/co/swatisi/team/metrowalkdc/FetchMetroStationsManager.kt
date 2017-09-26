@@ -5,10 +5,7 @@ import android.util.Log
 import co.swatisi.team.metrowalkdc.model.StationData
 import com.koushikdutta.ion.Ion
 
-/**
- * Created by ihasanov on 9/19/17.
- */
-object FetchMetroStationsAsyncTask {
+object FetchMetroStationsManager {
 
     private const val METRO_API = "https://api.wmata.com/Rail.svc/json/jStations"
     private const val METRO_API_TOKEN = "372279dd0fae484ea9c426f476031703"

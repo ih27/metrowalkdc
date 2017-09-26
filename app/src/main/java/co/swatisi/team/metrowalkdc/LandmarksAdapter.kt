@@ -7,9 +7,6 @@ import android.view.ViewGroup
 import co.swatisi.team.metrowalkdc.model.LandmarkData
 import kotlinx.android.synthetic.main.row_landmarks.view.*
 
-/**
- * Created by ihasanov on 9/19/17.
- */
 class LandmarksAdapter : RecyclerView.Adapter<LandmarksAdapter.ViewHolder>() {
 
     lateinit var itemClickListener: OnItemClickListener

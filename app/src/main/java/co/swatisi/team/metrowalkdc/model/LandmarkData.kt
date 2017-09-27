@@ -13,6 +13,7 @@ object LandmarkData {
     }
 
     fun updateList(jsonObject: JsonObject) {
+        landmarkList = arrayListOf<Landmark>()
         val jsonArray = jsonObject.getAsJsonArray("businesses")
         for (i in 0 until jsonArray.size()) {
             val name = jsonArray.get(i).asJsonObject.get("name").asString

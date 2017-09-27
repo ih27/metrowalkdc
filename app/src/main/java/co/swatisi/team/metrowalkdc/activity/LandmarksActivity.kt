@@ -52,8 +52,15 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landmarks)
 
-        // Get the required runtime location permission
-        getLocationPermission()
+        // Check if coming from MetroStationsActivity
+        if(intent.hasExtra("latitude") || intent.hasExtra("longitude")) {
+            val metroLat = intent.getDoubleExtra("latitude", 0.0)
+            val metroLon = intent.getDoubleExtra("longitude", 0.0)
+            getLandmarksAndShow(metroLat, metroLon)
+        } else {
+            // Closest station needed, so location permission check initiated
+            getLocationPermission()
+        }
     }
 
     override fun onResume() {
@@ -76,6 +83,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         }
     }
 
+    // Request location permission, if not enabled
     private fun getLocationPermission() {
         /*  The result of the runtime permission request is handled by a callback,
             onRequestPermissionsResult */
@@ -104,7 +112,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             if (locationPermissionGranted) setUp() else finish()
         }
     }
-
+    // Set up the activity's components
     private fun setUp() {
         // Start the location updates
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -114,15 +122,16 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         locationDetector?.startLocationUpdates()
         requestingLocationUpdates = true
 
-        // Show ProgressDialog
+        // LocationListener interface callbacks will determine the flow
+        // of the activity next
+    }
+
+    private fun showProgressWhileWaiting() {
         progressDialog = ProgressDialog(this)
         progressDialog?.setCancelable(false)
         progressDialog?.setMessage("Loading")
         progressDialog?.isIndeterminate=true
         progressDialog?.show()
-
-        // LocationListener interface callbacks will determine the flow
-        // of the activity next
     }
 
     private fun getClosestStationCoordinates(): Pair<out Double, out Double> {
@@ -143,15 +152,21 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         return Pair(stationList[minIndex].lat, stationList[minIndex].lon)
     }
 
-    override fun locationKnown() {
-        selectedLocation = locationDetector?.getLastLocation()
-        Log.d(tag, selectedLocation.toString())
+    private fun populateRecyclerView() {
+        staggeredLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+        landmarksList.layoutManager = staggeredLayoutManager
 
-        val (closestLat, closestLon) = getClosestStationCoordinates()
+        adapter = LandmarksAdapter()
+        landmarksList.adapter = adapter
+        adapter.setOnItemClickListener(onItemClickListener)
+    }
 
-        fetchLandmarksManager = FetchLandmarksManager(this, closestLat, closestLon)
+    private fun getLandmarksAndShow(lat: Double, lon: Double) {
+        // Show ProgressDialog
+        showProgressWhileWaiting()
 
-        // Show progressbar while getting the landmarks
+        fetchLandmarksManager = FetchLandmarksManager(this@LandmarksActivity, lat, lon)
+
         doAsync {
             val landmarks = fetchLandmarksManager.getLandmarksList()
             Log.d(tag, "Landmarks: ${landmarks.toString()}")
@@ -165,16 +180,20 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
                     // Hide the ProgressDialog
                     progressDialog?.dismiss()
 
-                    staggeredLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-                    landmarksList.layoutManager = staggeredLayoutManager
-
-                    adapter = LandmarksAdapter()
-                    landmarksList.adapter = adapter
-                    adapter.setOnItemClickListener(onItemClickListener)
+                    // Show the list
+                    populateRecyclerView()
                 }
             } else {
                 Log.e(tag, "Something wrong with fetching landmarks")
             }
+        }
+    }
+
+    override fun locationKnown() {
+        selectedLocation = locationDetector?.getLastLocation()
+        selectedLocation?.let {
+            val (closestLat, closestLon) = getClosestStationCoordinates()
+            getLandmarksAndShow(closestLat, closestLon)
         }
     }
 

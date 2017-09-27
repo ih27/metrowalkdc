@@ -1,5 +1,6 @@
 package co.swatisi.team.metrowalkdc.activity
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -17,6 +18,11 @@ class MetroStationsActivity : AppCompatActivity() {
 
     private val onItemClickListener = object : MetroStationsAdapter.OnItemClickListener {
         override fun onItemClick(view: View, position: Int) {
+            val intent = Intent(this@MetroStationsActivity, LandmarksActivity::class.java)
+            intent.putExtra("latitude", StationData.stationList()[position].lat)
+            intent.putExtra("longitude", StationData.stationList()[position].lon)
+            // Start the LandmarksActivity with the coordinates of the selected station
+            startActivity(intent)
         }
     }
 

@@ -16,11 +16,13 @@ import co.swatisi.team.metrowalkdc.adapter.LandmarksAdapter
 import co.swatisi.team.metrowalkdc.utility.LocationDetector
 import co.swatisi.team.metrowalkdc.R
 import co.swatisi.team.metrowalkdc.model.LandmarkData
+import co.swatisi.team.metrowalkdc.model.StationData
 import co.swatisi.team.metrowalkdc.utility.Constants
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_landmarks.*
 import org.jetbrains.anko.activityUiThread
+import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 
@@ -37,6 +39,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
     private lateinit var fetchLandmarksManager: FetchLandmarksManager
     private lateinit var staggeredLayoutManager: StaggeredGridLayoutManager
     private lateinit var adapter: LandmarksAdapter
+    private var stationList = StationData.stationList()
 
     private var progressDialog: ProgressDialog? = null
 
@@ -122,10 +125,31 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         // of the activity next
     }
 
+    private fun getClosestStationCoordinates(): Pair<out Double, out Double> {
+        // Iterate over the metro stations list to find the closest
+        var minDistance = Double.MAX_VALUE
+        var minIndex = 0
+        stationList.forEachWithIndex { index, station ->
+            val stationLocation = Location("")
+            stationLocation.latitude = station.lat
+            stationLocation.longitude = station.lon
+            val distance = stationLocation.distanceTo(selectedLocation)
+            if (distance < minDistance) {
+                minDistance = distance.toDouble()
+                minIndex = index
+            }
+        }
+        Log.d(tag, "The closest station is: ${stationList[minIndex].name}")
+        return Pair(stationList[minIndex].lat, stationList[minIndex].lon)
+    }
+
     override fun locationKnown() {
         selectedLocation = locationDetector?.getLastLocation()
         Log.d(tag, selectedLocation.toString())
-        fetchLandmarksManager = FetchLandmarksManager(this, selectedLocation)
+
+        val (closestLat, closestLon) = getClosestStationCoordinates()
+
+        fetchLandmarksManager = FetchLandmarksManager(this, closestLat, closestLon)
 
         // Show progressbar while getting the landmarks
         doAsync {
@@ -139,7 +163,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
                     }
 
                     // Hide the ProgressDialog
-                    progressDialog?.hide()
+                    progressDialog?.dismiss()
 
                     staggeredLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
                     landmarksList.layoutManager = staggeredLayoutManager

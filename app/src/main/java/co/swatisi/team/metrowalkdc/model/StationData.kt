@@ -15,8 +15,8 @@ object StationData {
         val jsonArray = jsonObject.getAsJsonArray("Stations")
         for (i in 0 until jsonArray.size()) {
             val name = jsonArray.get(i).asJsonObject.get("Name").asString
-            val lat = jsonArray.get(i).asJsonObject.get("Lat").asFloat
-            val lon = jsonArray.get(i).asJsonObject.get("Lon").asFloat
+            val lat = jsonArray.get(i).asJsonObject.get("Lat").asDouble
+            val lon = jsonArray.get(i).asJsonObject.get("Lon").asDouble
             val lineCode = jsonArray.get(i).asJsonObject.get("LineCode1").asString
             val station = Station(name, lat, lon, lineCode)
             stationList.add(station)

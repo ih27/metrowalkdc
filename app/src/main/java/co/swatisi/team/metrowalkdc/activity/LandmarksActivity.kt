@@ -22,6 +22,9 @@ import kotlinx.android.synthetic.main.activity_landmarks.*
 import org.jetbrains.anko.activityUiThread
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
+import android.content.Intent
+
+
 
 class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
         LocationDetector.LocationCompletionListener {
@@ -53,24 +56,11 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         // Get the required runtime location permission
         getLocationPermission()
 
-        if (locationPermissionGranted) {
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-            locationDetector = LocationDetector(this, fusedLocationClient)
-            locationDetector?.locationCompletionListener = this
-
-            locationDetector?.startLocationUpdates()
-            requestingLocationUpdates = true
-
-            // Show ProgressDialog
-            progressDialog = ProgressDialog(this)
-            progressDialog?.setCancelable(false)
-            progressDialog?.setMessage("Loading")
-            progressDialog?.isIndeterminate=true
-            progressDialog?.show()
-
-        } else {
-            Log.d(TAG, "The permission is not granted.")
-        }
+//        if (locationPermissionGranted) {
+//            setUp()
+//        } else {
+//            Log.d(TAG, "The permission is not granted.")
+//        }
     }
 
     override fun onResume() {
@@ -98,7 +88,9 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             onRequestPermissionsResult */
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
+            // Permission is already granted, set up the activity
             locationPermissionGranted = true
+            setUp()
         } else {
             ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -113,7 +105,27 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             // Kotlin short if statement
             locationPermissionGranted = grantResults.isNotEmpty() &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
+
+            // Based on the user selection either set up the activity
+            // or finish it going back to the menu
+            if (locationPermissionGranted) setUp() else finish()
         }
+    }
+
+    private fun setUp() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        locationDetector = LocationDetector(this, fusedLocationClient)
+        locationDetector?.locationCompletionListener = this
+
+        locationDetector?.startLocationUpdates()
+        requestingLocationUpdates = true
+
+        // Show ProgressDialog
+        progressDialog = ProgressDialog(this)
+        progressDialog?.setCancelable(false)
+        progressDialog?.setMessage("Loading")
+        progressDialog?.isIndeterminate=true
+        progressDialog?.show()
     }
 
     override fun locationKnown() {

@@ -6,14 +6,14 @@ import java.util.ArrayList
 
 object LandmarkData {
 
-    private var landmarkList = arrayListOf<Landmark>()
+    private var landmarkList: ArrayList<Landmark> = arrayListOf()
 
     fun landmarkList(): ArrayList<Landmark> {
         return landmarkList
     }
 
     fun updateList(jsonObject: JsonObject) {
-        landmarkList = arrayListOf<Landmark>()
+        landmarkList = arrayListOf()
         val jsonArray = jsonObject.getAsJsonArray("businesses")
         for (i in 0 until jsonArray.size()) {
             val name = jsonArray.get(i).asJsonObject.get("name").asString

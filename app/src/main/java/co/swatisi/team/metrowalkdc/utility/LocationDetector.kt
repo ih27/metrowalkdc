@@ -8,7 +8,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 
-class LocationDetector(val context: Context, val fusedLocationClient: FusedLocationProviderClient?) {
+class LocationDetector(val context: Context, private val fusedLocationClient: FusedLocationProviderClient?) {
     private val tag = "LocationDetector"
     private lateinit var locationRequest: LocationRequest
     private var locationCallback: LocationCallback? = null

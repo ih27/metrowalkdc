@@ -18,7 +18,7 @@
         </activity>
         <activity android:name=".activity.MetroStationsActivity" />
         <activity android:name=".activity.LandmarksActivity" />
-        <activity android:name=".activity.LandmarkDetailActivity"></activity>
+        <activity android:name=".activity.LandmarkDetailActivity" />
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

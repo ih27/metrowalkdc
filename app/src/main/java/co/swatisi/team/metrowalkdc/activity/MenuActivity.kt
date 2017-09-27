@@ -1,8 +1,10 @@
-package co.swatisi.team.metrowalkdc
+package co.swatisi.team.metrowalkdc.activity
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import co.swatisi.team.metrowalkdc.utility.FetchMetroStationsManager
+import co.swatisi.team.metrowalkdc.R
 import kotlinx.android.synthetic.main.activity_menu.*
 
 class MenuActivity : AppCompatActivity() {

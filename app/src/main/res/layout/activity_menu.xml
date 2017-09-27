@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical"
-    tools:context="co.swatisi.team.metrowalkdc.MenuActivity">
+    tools:context="co.swatisi.team.metrowalkdc.activity.MenuActivity">
 
     <Button
         android:id="@+id/closest_station_button"

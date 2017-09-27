@@ -1,9 +1,12 @@
-package co.swatisi.team.metrowalkdc
+package co.swatisi.team.metrowalkdc.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
+import co.swatisi.team.metrowalkdc.utility.FetchMetroStationsManager
+import co.swatisi.team.metrowalkdc.adapter.MetroStationsAdapter
+import co.swatisi.team.metrowalkdc.R
 import co.swatisi.team.metrowalkdc.model.StationData
 import kotlinx.android.synthetic.main.activity_metro_stations.*
 

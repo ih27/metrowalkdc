@@ -1,4 +1,4 @@
-package co.swatisi.team.metrowalkdc
+package co.swatisi.team.metrowalkdc.activity
 
 import android.Manifest
 import android.app.ProgressDialog
@@ -11,6 +11,10 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
 import android.view.View
+import co.swatisi.team.metrowalkdc.utility.FetchLandmarksManager
+import co.swatisi.team.metrowalkdc.adapter.LandmarksAdapter
+import co.swatisi.team.metrowalkdc.utility.LocationDetector
+import co.swatisi.team.metrowalkdc.R
 import co.swatisi.team.metrowalkdc.model.LandmarkData
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -20,17 +24,17 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 
 class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
-                            LocationDetector.LocationCompletionListener {
+        LocationDetector.LocationCompletionListener {
 
     private val TAG = "LandmarksActivity"
     private val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
 
     private var fusedLocationClient: FusedLocationProviderClient? = null
     private var selectedLocation: Location? = null
-    private var requestingLocationUpdates = true
+    private var requestingLocationUpdates = false
     private var locationPermissionGranted = false
 
-    private lateinit var locationDetector: LocationDetector
+    private var locationDetector: LocationDetector? = null
     private lateinit var fetchLandmarksManager: FetchLandmarksManager
     private lateinit var staggeredLayoutManager: StaggeredGridLayoutManager
     private lateinit var adapter: LandmarksAdapter
@@ -51,10 +55,10 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
         if (locationPermissionGranted) {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-            locationDetector = LocationDetector(this,fusedLocationClient)
-            locationDetector.locationCompletionListener = this
+            locationDetector = LocationDetector(this, fusedLocationClient)
+            locationDetector?.locationCompletionListener = this
 
-            locationDetector.startLocationUpdates()
+            locationDetector?.startLocationUpdates()
             requestingLocationUpdates = true
 
             // Show ProgressDialog
@@ -73,8 +77,8 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         super.onResume()
 
         // Start the location updates
-        if (!requestingLocationUpdates) {
-            locationDetector.startLocationUpdates()
+        if (!requestingLocationUpdates && locationDetector != null) {
+            locationDetector?.startLocationUpdates()
             requestingLocationUpdates = true
         }
     }
@@ -83,8 +87,8 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         super.onPause()
 
         // Stop the location updates to save power consumption
-        if (requestingLocationUpdates) {
-            locationDetector.stopLocationUpdates()
+        if (requestingLocationUpdates && locationDetector != null) {
+            locationDetector?.stopLocationUpdates()
             requestingLocationUpdates = false
         }
     }
@@ -113,13 +117,14 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
     }
 
     override fun locationKnown() {
-        selectedLocation = locationDetector.getLastLocation()
+        selectedLocation = locationDetector?.getLastLocation()
         Log.d(TAG, selectedLocation.toString())
         fetchLandmarksManager = FetchLandmarksManager(this, selectedLocation)
 
         // Show progressbar while getting the landmarks
         doAsync {
             val landmarks = fetchLandmarksManager.getLandmarksList()
+            Log.d(TAG, "Landmarks: ${landmarks.toString()}")
             if (landmarks != null) {
                 activityUiThread {
                     // Check if we have the landmark data

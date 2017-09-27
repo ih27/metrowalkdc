@@ -1,4 +1,4 @@
-package co.swatisi.team.metrowalkdc
+package co.swatisi.team.metrowalkdc.utility
 
 import android.content.Context
 import android.location.Location

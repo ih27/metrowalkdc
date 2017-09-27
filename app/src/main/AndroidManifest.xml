@@ -9,16 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MenuActivity">
+        <activity android:name=".activity.MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MetroStationsActivity" />
-        <activity android:name=".LandmarksActivity" />
-        <activity android:name=".LandmarkDetailActivity"></activity>
+        <activity android:name=".activity.MetroStationsActivity" />
+        <activity android:name=".activity.LandmarksActivity" />
+        <activity android:name=".activity.LandmarkDetailActivity"></activity>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

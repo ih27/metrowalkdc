@@ -1,7 +1,7 @@
 package co.swatisi.team.metrowalkdc.model
 
+import android.net.Uri
 import com.google.gson.JsonObject
-import java.net.URL
 import java.util.ArrayList
 
 object LandmarkData {
@@ -17,7 +17,7 @@ object LandmarkData {
         val jsonArray = jsonObject.getAsJsonArray("businesses")
         for (i in 0 until jsonArray.size()) {
             val name = jsonArray.get(i).asJsonObject.get("name").asString
-            val imageUrl = URL(jsonArray.get(i).asJsonObject.get("image_url").asString)
+            val imageUrl = Uri.parse(jsonArray.get(i).asJsonObject.get("image_url").asString)
             val address = jsonArray.get(i).asJsonObject.get("location").asJsonObject
                     .getAsJsonArray("display_address").get(0).asString
             val coordinates = jsonArray.get(i).asJsonObject.get("coordinates")

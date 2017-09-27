@@ -170,20 +170,32 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         doAsync {
             val landmarks = fetchLandmarksManager.getLandmarksList()
             Log.d(tag, "Landmarks: ${landmarks.toString()}")
+
             if (landmarks != null) {
+                // Success fetching
                 activityUiThread {
-                    // Check if we have the landmark data
-                    if(LandmarkData.landmarkList().isEmpty()) {
-                        LandmarkData.updateList(landmarks)
+                    if (landmarks.get("total").asInt != 0) {
+                        // One or more landmarks returned
+                        // Check if we have the landmark data
+                        if (LandmarkData.landmarkList().isEmpty()) {
+                            LandmarkData.updateList(landmarks)
+                        }
+                        // Hide the ProgressDialog
+                        progressDialog?.dismiss()
+                        // Show the list
+                        populateRecyclerView()
+                    } else {
+                        // Zero landmarks within the radius
+                        // Hide the ProgressDialog
+                        progressDialog?.dismiss()
+                        finish()
+                        toast("No landmarks within ${Constants.RADIUS}m")
+
+                        // TODO: Perhaps ask user to increase the radius?!
                     }
-
-                    // Hide the ProgressDialog
-                    progressDialog?.dismiss()
-
-                    // Show the list
-                    populateRecyclerView()
                 }
             } else {
+                // Failure fetching
                 Log.e(tag, "Something wrong with fetching landmarks")
             }
         }

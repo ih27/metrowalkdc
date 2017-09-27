@@ -7,35 +7,27 @@ import co.swatisi.team.metrowalkdc.model.StationData
 import com.google.gson.JsonObject
 import com.koushikdutta.ion.Ion
 
-class FetchLandmarksManager(val context: Context, val location: Location?) {
+class FetchLandmarksManager(val context: Context, private val location: Location?) {
 
-    private val YELP_API = "https://api.yelp.com/v3/businesses/search"
-    private val YELP_API_TOKEN = "Bearer Z4XQpK2rOdiyuruBtz6BAr9hDit9NmkEiav-EcEDr_" +
-            "UkfrARs7nS900FcZ8nsG0URpIAlanZi7DaH7SoMxS7mgMD9ArpW5CzQp3NkiUp4YuHqQnRSdvmkqP9W2bIWXYx"
-    private val TAG = "FetchLandmarks"
-
-    // Yelp Search API query parameters
-    private val RADIUS = "1600"
-    private val CATEGORY = "landmarks"
-    private val SORT_BY = "distance"
+    private val tag = "FetchLandmarks"
 
     fun getLandmarksList(): JsonObject? {
         var jsonLandmarks = JsonObject()
         try {
-            jsonLandmarks = Ion.with(context).load(YELP_API)
-                    .addHeader("Authorization", YELP_API_TOKEN)
+            jsonLandmarks = Ion.with(context).load(Constants.YELP_API)
+                    .addHeader("Authorization", Constants.YELP_API_TOKEN)
                     .addQuery("latitude", location?.latitude.toString())
                     .addQuery("longitude", location?.longitude.toString())
-                    .addQuery("radius", RADIUS)
-                    .addQuery("categories", CATEGORY)
-                    .addQuery("sort_by", SORT_BY)
+                    .addQuery("radius", Constants.RADIUS)
+                    .addQuery("categories", Constants.CATEGORY)
+                    .addQuery("sort_by", Constants.SORT_BY)
                     .asJsonObject().get()
             jsonLandmarks?.let {
                 StationData.updateList(jsonLandmarks)
-                Log.d(TAG, "Landmarks List Received.")
+                Log.d(tag, "Landmarks List Received.")
             }
         } catch (e: Exception) {
-            Log.e(TAG, e.message)
+            Log.e(tag, e.message)
         }
         return jsonLandmarks
     }

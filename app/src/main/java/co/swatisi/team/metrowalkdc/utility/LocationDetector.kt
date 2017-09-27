@@ -9,7 +9,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 
 class LocationDetector(val context: Context, val fusedLocationClient: FusedLocationProviderClient?) {
-    private val TAG = "LocationDetector"
+    private val tag = "LocationDetector"
     private lateinit var locationRequest: LocationRequest
     private var locationCallback: LocationCallback? = null
     private var lastLocation: Location? = null
@@ -46,20 +46,18 @@ class LocationDetector(val context: Context, val fusedLocationClient: FusedLocat
             locationResult?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     lastLocation = locationResult.result
-
-                    Log.d(TAG, "Task success: ${locationResult.toString()}")
                     // Success - Location available
                     locationCompletionListener?.locationKnown()
                 } else {
                     // Fail - No location available
                     locationCompletionListener?.locationUnknown()
-                    Log.e(TAG, "Task Exception: %${task.exception}")
+                    Log.e(tag, "Task Exception: %${task.exception}")
                 }
             }
         } catch (e: SecurityException) {
             // Fail - No location available
             locationCompletionListener?.locationUnknown()
-            Log.e(TAG,"Security Exception: ${e.cause}")
+            Log.e(tag,"Security Exception: ${e.cause}")
         }
     }
 

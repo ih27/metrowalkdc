@@ -5,7 +5,6 @@ import java.util.ArrayList
 
 object StationData {
 
-    private const val TAG = "StationData"
     private var stationList = arrayListOf<Station>()
 
     fun stationList(): ArrayList<Station> {

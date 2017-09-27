@@ -16,22 +16,18 @@ import co.swatisi.team.metrowalkdc.adapter.LandmarksAdapter
 import co.swatisi.team.metrowalkdc.utility.LocationDetector
 import co.swatisi.team.metrowalkdc.R
 import co.swatisi.team.metrowalkdc.model.LandmarkData
+import co.swatisi.team.metrowalkdc.utility.Constants
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_landmarks.*
 import org.jetbrains.anko.activityUiThread
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
-import android.content.Intent
-
-
 
 class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
         LocationDetector.LocationCompletionListener {
 
-    private val TAG = "LandmarksActivity"
-    private val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
-
+    private val tag = "LandmarksActivity"
     private var fusedLocationClient: FusedLocationProviderClient? = null
     private var selectedLocation: Location? = null
     private var requestingLocationUpdates = false
@@ -55,12 +51,6 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
         // Get the required runtime location permission
         getLocationPermission()
-
-//        if (locationPermissionGranted) {
-//            setUp()
-//        } else {
-//            Log.d(TAG, "The permission is not granted.")
-//        }
     }
 
     override fun onResume() {
@@ -94,14 +84,14 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         } else {
             ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
+                    Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
         }
     }
 
     // Location runtime permission flag is adjusted based on the user action
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
                                             grantResults: IntArray) {
-        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+        if (requestCode == Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
             // Kotlin short if statement
             locationPermissionGranted = grantResults.isNotEmpty() &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
@@ -113,6 +103,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
     }
 
     private fun setUp() {
+        // Start the location updates
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationDetector = LocationDetector(this, fusedLocationClient)
         locationDetector?.locationCompletionListener = this
@@ -126,17 +117,20 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         progressDialog?.setMessage("Loading")
         progressDialog?.isIndeterminate=true
         progressDialog?.show()
+
+        // LocationListener interface callbacks will determine the flow
+        // of the activity next
     }
 
     override fun locationKnown() {
         selectedLocation = locationDetector?.getLastLocation()
-        Log.d(TAG, selectedLocation.toString())
+        Log.d(tag, selectedLocation.toString())
         fetchLandmarksManager = FetchLandmarksManager(this, selectedLocation)
 
         // Show progressbar while getting the landmarks
         doAsync {
             val landmarks = fetchLandmarksManager.getLandmarksList()
-            Log.d(TAG, "Landmarks: ${landmarks.toString()}")
+            Log.d(tag, "Landmarks: ${landmarks.toString()}")
             if (landmarks != null) {
                 activityUiThread {
                     // Check if we have the landmark data
@@ -155,7 +149,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
                     adapter.setOnItemClickListener(onItemClickListener)
                 }
             } else {
-                Log.e(TAG, "Something wrong with fetching landmarks")
+                Log.e(tag, "Something wrong with fetching landmarks")
             }
         }
     }

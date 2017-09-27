@@ -6,7 +6,6 @@ import java.util.ArrayList
 
 object LandmarkData {
 
-    private const val TAG = "LandmarkData"
     private var landmarkList = arrayListOf<Landmark>()
 
     fun landmarkList(): ArrayList<Landmark> {

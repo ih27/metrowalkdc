@@ -25,6 +25,12 @@ import org.jetbrains.anko.activityUiThread
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
+import android.support.v4.content.ContextCompat.startActivity
+import android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS
+import android.content.Intent
+import android.provider.Settings
+import android.widget.Toast
+
 
 class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
         LocationDetector.LocationCompletionListener {
@@ -114,11 +120,21 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
     }
     // Set up the activity's components
     private fun setUp() {
-        // Start the location updates
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationDetector = LocationDetector(this, fusedLocationClient)
         locationDetector?.locationCompletionListener = this
 
+        // Send to location settings page in case the location services are turned off
+        val isServiceEnabled = locationDetector?.isLocationServiceEnabled() as Boolean
+        if (!isServiceEnabled) {
+            finish()
+            Toast.makeText(this, "Please enable the Location Services to ",
+                    Toast.LENGTH_LONG).show()
+            val locationSettingsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(locationSettingsIntent)
+        }
+
+        // Start the location updates
         locationDetector?.startLocationUpdates()
         requestingLocationUpdates = true
 
@@ -134,7 +150,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         progressDialog?.show()
     }
 
-    private fun getClosestStationCoordinates(): Pair<out Double, out Double> {
+    private fun getClosestStationCoordinates(): Pair<Double, Double> {
         // Iterate over the metro stations list to find the closest
         var minDistance = Double.MAX_VALUE
         var minIndex = 0

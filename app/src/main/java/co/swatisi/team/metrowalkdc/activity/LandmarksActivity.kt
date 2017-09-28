@@ -2,8 +2,10 @@ package co.swatisi.team.metrowalkdc.activity
 
 import android.Manifest
 import android.app.ProgressDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -11,6 +13,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import co.swatisi.team.metrowalkdc.utility.FetchLandmarksManager
 import co.swatisi.team.metrowalkdc.adapter.LandmarksAdapter
 import co.swatisi.team.metrowalkdc.utility.LocationDetector
@@ -18,19 +21,10 @@ import co.swatisi.team.metrowalkdc.R
 import co.swatisi.team.metrowalkdc.model.LandmarkData
 import co.swatisi.team.metrowalkdc.model.StationData
 import co.swatisi.team.metrowalkdc.utility.Constants
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_landmarks.*
-import org.jetbrains.anko.activityUiThread
-import org.jetbrains.anko.collections.forEachWithIndex
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
-import android.support.v4.content.ContextCompat.startActivity
-import android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS
-import android.content.Intent
-import android.provider.Settings
-import android.widget.Toast
-
+import org.jetbrains.anko.*
+import org.jetbrains.anko.collections.*
 
 class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
         LocationDetector.LocationCompletionListener {
@@ -51,6 +45,11 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
     private val onItemClickListener = object : LandmarksAdapter.OnItemClickListener {
         override fun onItemClick(view: View, position: Int) {
+            val intent = Intent(this@LandmarksActivity, LandmarkDetailActivity::class.java)
+            val landmark = LandmarkData.landmarkList()[position]
+            intent.putExtra("landmark", landmark)
+            // Start the LandmarkDetailActivity with the selected landmark passed
+            startActivity(intent)
         }
     }
 

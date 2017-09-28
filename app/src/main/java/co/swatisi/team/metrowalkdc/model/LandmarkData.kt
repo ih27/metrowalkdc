@@ -25,8 +25,9 @@ object LandmarkData {
             val coordinates = jsonArray.get(i).asJsonObject.get("coordinates")
             val lat = coordinates.asJsonObject.get("latitude").asDouble
             val lon = coordinates.asJsonObject.get("longitude").asDouble
-            val distance = jsonArray.get(i).asJsonObject.get("distance").asFloat
-            val landmark = Landmark(name, imageUrl, address, lat, lon, distance)
+            val distance = jsonArray.get(i).asJsonObject.get("distance").asDouble
+            val rating = jsonArray.get(i).asJsonObject.get("rating").asInt
+            val landmark = Landmark(name, imageUrl, address, lat, lon, distance, rating)
             landmarkList.add(landmark)
         }
     }

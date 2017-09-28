@@ -25,7 +25,7 @@ class LandmarksAdapter : RecyclerView.Adapter<LandmarksAdapter.ViewHolder>() {
         val landmark = LandmarkData.landmarkList()[position]
         holder?.itemView?.landmark_name?.text = landmark.name
         holder?.itemView?.landmark_rating?.text = landmark.rating.toString()
-        holder?.itemView?.landmark_distance?.text = landmark.distance.toString()
+        holder?.itemView?.landmark_distance?.text = landmark.distance.toString() + " miles away"
     }
 
     override fun getItemCount() = LandmarkData.landmarkList().size

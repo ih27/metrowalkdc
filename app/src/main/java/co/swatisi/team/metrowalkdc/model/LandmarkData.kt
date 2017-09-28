@@ -1,6 +1,8 @@
 package co.swatisi.team.metrowalkdc.model
 
 import android.net.Uri
+import android.provider.SyncStateContract
+import co.swatisi.team.metrowalkdc.utility.Constants
 import com.google.gson.JsonObject
 import java.util.ArrayList
 
@@ -25,7 +27,8 @@ object LandmarkData {
             val coordinates = jsonArray.get(i).asJsonObject.get("coordinates")
             val lat = coordinates.asJsonObject.get("latitude").asDouble
             val lon = coordinates.asJsonObject.get("longitude").asDouble
-            val distance = jsonArray.get(i).asJsonObject.get("distance").asDouble
+            val distanceMeters = jsonArray.get(i).asJsonObject.get("distance").asDouble
+            val distance = Math.round(distanceMeters * Constants.MILES_CONVERSION * 100) / 100.toDouble()
             val rating = jsonArray.get(i).asJsonObject.get("rating").asInt
             val landmark = Landmark(name, imageUrl, address, lat, lon, distance, rating)
             landmarkList.add(landmark)

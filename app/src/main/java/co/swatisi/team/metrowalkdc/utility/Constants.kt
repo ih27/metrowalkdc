@@ -16,6 +16,7 @@ object Constants {
     const val RADIUS = "1600" /* 1 mile = 1600 meters */
     const val CATEGORY = "landmarks"
     const val SORT_BY = "distance"
+    const val MILES_CONVERSION = 0.000621371
 
 
 }

@@ -5,13 +5,15 @@ import com.google.gson.JsonObject
 import java.util.ArrayList
 
 object LandmarkData {
-
+    // ArrayList variable to hold landmarks data
     private var landmarkList: ArrayList<Landmark> = arrayListOf()
 
+    // Get the landmarks list
     fun landmarkList(): ArrayList<Landmark> {
         return landmarkList
     }
 
+    // Given the JSON object, update the landmarks list
     fun updateList(jsonObject: JsonObject) {
         landmarkList = arrayListOf()
         val jsonArray = jsonObject.getAsJsonArray("businesses")
@@ -21,11 +23,18 @@ object LandmarkData {
             val address = jsonArray.get(i).asJsonObject.get("location").asJsonObject
                     .getAsJsonArray("display_address").get(0).asString
             val coordinates = jsonArray.get(i).asJsonObject.get("coordinates")
-            val lat = coordinates.asJsonObject.get("latitude").asFloat
-            val lon = coordinates.asJsonObject.get("longitude").asFloat
+            val lat = coordinates.asJsonObject.get("latitude").asDouble
+            val lon = coordinates.asJsonObject.get("longitude").asDouble
             val distance = jsonArray.get(i).asJsonObject.get("distance").asFloat
             val landmark = Landmark(name, imageUrl, address, lat, lon, distance)
             landmarkList.add(landmark)
+        }
+    }
+
+    // Given the coordinates, get the landmark
+    fun getLandmark(lat: Double, lon: Double): Landmark? {
+        return landmarkList.find {
+            it.lat == lat && it.lon == lon
         }
     }
 }

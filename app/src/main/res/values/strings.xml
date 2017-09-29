@@ -2,9 +2,18 @@
     <string name="app_name">MetroWalkDC</string>
     <string name="metro_stations">Metro Stations</string>
     <string name="closest_station">Closest Station</string>
+    <string name="favorite_landmarks">Favorite Landmarks</string>
     <string name="landmark_image_description">Landmark Image</string>
     <string name="distance_miles_away">Distance miles away</string>
     <string name="landmark_name">Landmark Name</string>
     <string name="landmark_miles_text">%.2f miles away</string>
-    <string name="favorite_landmarks">Favorite Landmarks</string>
+    <string name="landmark_detail_name">Landmark Name</string>
+    <string name="landmark_detail_review">Review</string>
+    <string name="landmark_detail_affordability">Affordability</string>
+    <string name="landmark_detail_type">Landmark Type</string>
+    <string name="landmark_detail_timing">Working Hours</string>
+    <string name="landmark_detail_pnumber">Phone Number</string>
+    <string name="landmark_detail_website">Website URL</string>
+    <string name="landmark_detail_address">Address</string>
+
 </resources>

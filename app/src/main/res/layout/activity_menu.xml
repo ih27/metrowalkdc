@@ -8,6 +8,12 @@
     tools:context="co.swatisi.team.metrowalkdc.activity.MenuActivity">
 
     <Button
+        android:id="@+id/favorite_landmarks_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/favorite_landmarks"/>
+
+    <Button
         android:id="@+id/closest_station_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

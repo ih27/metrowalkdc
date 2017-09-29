@@ -6,4 +6,5 @@
     <string name="distance_miles_away">Distance miles away</string>
     <string name="landmark_name">Landmark Name</string>
     <string name="landmark_miles_text">%.2f miles away</string>
+    <string name="favorite_landmarks">Favorite Landmarks</string>
 </resources>

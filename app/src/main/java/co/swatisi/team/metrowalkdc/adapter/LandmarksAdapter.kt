@@ -26,6 +26,8 @@ class LandmarksAdapter(private val context: Context) : RecyclerView.Adapter<Land
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         val landmark = LandmarkData.landmarkList()[position]
+
+        // Set the name, rating, distance and image dynamically
         holder?.itemView?.landmark_name?.text = landmark.name
         holder?.itemView?.landmark_rating?.rating = landmark.rating.toFloat()
         holder?.itemView?.landmark_distance?.text = String.format(
@@ -34,6 +36,7 @@ class LandmarksAdapter(private val context: Context) : RecyclerView.Adapter<Land
         if (landmark.imageURL.toString().isNotEmpty()) {
             Picasso.with(context).load(landmark.imageURL).into(holder?.itemView?.landmark_image)
         }
+        holder?.itemView?.landmark_image?.contentDescription = landmark.id
     }
 
     override fun getItemCount() = LandmarkData.landmarkList().size

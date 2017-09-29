@@ -2,4 +2,8 @@
     <string name="app_name">MetroWalkDC</string>
     <string name="metro_stations">Metro Stations</string>
     <string name="closest_station">Closest Station</string>
+    <string name="landmark_image_description">Landmark Image</string>
+    <string name="distance_miles_away">Distance miles away</string>
+    <string name="landmark_name">Landmark Name</string>
+    <string name="landmark_miles_text">%.2f miles away</string>
 </resources>

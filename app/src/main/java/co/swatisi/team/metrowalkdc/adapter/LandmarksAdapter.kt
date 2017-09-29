@@ -1,11 +1,6 @@
 package co.swatisi.team.metrowalkdc.adapter
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
-import android.support.v4.content.ContextCompat
-import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +8,7 @@ import android.view.ViewGroup
 import co.swatisi.team.metrowalkdc.R
 import co.swatisi.team.metrowalkdc.model.LandmarkData
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.row_landmarks.view.*
-import java.security.AccessControlContext
 
 
 class LandmarksAdapter(private val context: Context) : RecyclerView.Adapter<LandmarksAdapter.ViewHolder>() {
@@ -34,8 +27,9 @@ class LandmarksAdapter(private val context: Context) : RecyclerView.Adapter<Land
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         val landmark = LandmarkData.landmarkList()[position]
         holder?.itemView?.landmark_name?.text = landmark.name
-        holder?.itemView?.landmark_rating?.text = landmark.rating.toString()
-        holder?.itemView?.landmark_distance?.text = landmark.distance.toString() + " miles away"
+        holder?.itemView?.landmark_rating?.rating = landmark.rating.toFloat()
+        holder?.itemView?.landmark_distance?.text = String.format(
+                context.getString(R.string.landmark_miles_text, landmark.distance))
         // Load only if the image URL exists
         if (landmark.imageURL.toString().isNotEmpty()) {
             Picasso.with(context).load(landmark.imageURL).into(holder?.itemView?.landmark_image)

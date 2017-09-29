@@ -16,4 +16,5 @@ class LandmarkDetailActivity : AppCompatActivity() {
         val landmark = intent.getParcelableExtra<Landmark>("landmark")
         toast(landmark.name)
     }
+
 }

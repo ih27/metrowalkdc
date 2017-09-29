@@ -171,7 +171,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         staggeredLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         landmarksList.layoutManager = staggeredLayoutManager
 
-        adapter = LandmarksAdapter()
+        adapter = LandmarksAdapter(this)
         landmarksList.adapter = adapter
         adapter.setOnItemClickListener(onItemClickListener)
     }

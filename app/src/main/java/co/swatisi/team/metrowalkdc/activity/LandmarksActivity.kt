@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
+import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import co.swatisi.team.metrowalkdc.utility.FetchLandmarksManager
@@ -30,6 +31,8 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         LocationDetector.LocationCompletionListener {
 
     private val tag = "LandmarksActivity"
+
+    private lateinit var menu: Menu
     private var fusedLocationClient: FusedLocationProviderClient? = null
     private var selectedLocation: Location? = null
     private var requestingLocationUpdates = false
@@ -66,6 +69,13 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             // Closest station needed, so location permission check initiated
             getLocationPermission()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.options_menu, menu)
+        this.menu = menu
+        return true
     }
 
     override fun onResume() {
@@ -127,7 +137,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         val isServiceEnabled = locationDetector?.isLocationServiceEnabled() as Boolean
         if (!isServiceEnabled) {
             finish()
-            Toast.makeText(this, "Please enable the Location Services to ",
+            Toast.makeText(this, "Please enable the Location Services and try again",
                     Toast.LENGTH_LONG).show()
             val locationSettingsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             startActivity(locationSettingsIntent)
@@ -163,7 +173,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
                 minIndex = index
             }
         }
-        Log.d(tag, "The closest station is: ${stationList[minIndex].name}")
+        // Log.d(tag, "The closest station is: ${stationList[minIndex].name}")
         return Pair(stationList[minIndex].lat, stationList[minIndex].lon)
     }
 
@@ -218,9 +228,12 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
     override fun locationKnown() {
         selectedLocation = locationDetector?.getLastLocation()
-        selectedLocation?.let {
+        if (selectedLocation != null && stationList.isNotEmpty()) {
             val (closestLat, closestLon) = getClosestStationCoordinates()
             getLandmarksAndShow(closestLat, closestLon)
+        } else {
+            toast("We have no location or the metro stations list is not retrieved.")
+            finish()
         }
     }
 

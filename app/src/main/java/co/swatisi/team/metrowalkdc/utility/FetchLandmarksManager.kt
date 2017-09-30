@@ -19,6 +19,7 @@ class FetchLandmarksManager(val context: Context, private val lat: Double, priva
                     .addQuery("longitude", lon.toString())
                     .addQuery("radius", Constants.RADIUS)
                     .addQuery("categories", Constants.CATEGORY)
+                    .addQuery("limit", Constants.LIMIT)
                     .addQuery("sort_by", Constants.SORT_BY)
                     .asJsonObject().get()
             jsonLandmarks?.let {

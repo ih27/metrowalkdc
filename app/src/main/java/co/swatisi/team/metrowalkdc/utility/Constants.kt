@@ -17,7 +17,7 @@ object Constants {
     const val CATEGORY = "landmarks"
     const val SORT_BY = "rating"
     const val LIMIT = "10"
-    const val MILES_CONVERSION = 0.000621371
+    const val MILES_CONVERSION = 0.000625
 
 
 }

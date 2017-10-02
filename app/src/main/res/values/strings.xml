@@ -16,5 +16,6 @@
     <string name="landmark_detail_website">Website URL</string>
     <string name="landmark_detail_address">Address</string>
     <string name="search_title">Search</string>
+    <string name="search_hint">Find a station</string>
 
 </resources>

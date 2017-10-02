@@ -31,8 +31,6 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         LocationDetector.LocationCompletionListener {
 
     private val tag = "LandmarksActivity"
-
-    private lateinit var menu: Menu
     private var fusedLocationClient: FusedLocationProviderClient? = null
     private var selectedLocation: Location? = null
     private var requestingLocationUpdates = false
@@ -69,13 +67,6 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             // Closest station needed, so location permission check initiated
             getLocationPermission()
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.options_menu, menu)
-        this.menu = menu
-        return true
     }
 
     override fun onResume() {

@@ -16,7 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MetroStationsActivity" />
+        <activity android:name=".activity.MetroStationsActivity">
+
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+        </activity>
         <activity android:name=".activity.LandmarksActivity" />
         <activity android:name=".activity.LandmarkDetailActivity" />
     </application>

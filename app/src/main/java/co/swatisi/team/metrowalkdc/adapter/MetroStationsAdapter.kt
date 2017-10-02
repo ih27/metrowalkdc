@@ -16,8 +16,8 @@ import java.util.ArrayList
 class MetroStationsAdapter : RecyclerView.Adapter<MetroStationsAdapter.ViewHolder>(), Filterable {
     private val tag = "MetroStationsAdapter"
     lateinit var itemClickListener: OnItemClickListener
-    private var stationList = StationData.stationList()
-    private var filteredStationList = stationList.clone() as ArrayList<Station>
+    private val stationList = StationData.stationList().toMutableList() as ArrayList<Station>
+    private var filteredStationList = stationList
 
     fun setOnItemClickListener(itemClickListener: OnItemClickListener) {
         this.itemClickListener = itemClickListener
@@ -48,25 +48,25 @@ class MetroStationsAdapter : RecyclerView.Adapter<MetroStationsAdapter.ViewHolde
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(charSequence: CharSequence?): FilterResults {
-                val charString = charSequence.toString()
-                if (charString.isEmpty()) {
-                    filteredStationList = stationList
-                } else {
-                    val filteredList = arrayListOf<Station>()
-                    for (station in stationList) {
-                        if (station.name.toLowerCase().contains(charString)) {
-                            filteredList.add(station)
-                        }
-                    }
-                    filteredStationList = filteredList
-                }
                 val filterResults = FilterResults()
+                val charString = charSequence.toString()
+                filteredStationList = when(charString.isEmpty()) {
+                    true ->
+                        stationList /* the list stays the same */
+                    else -> {
+                        val filteredList = arrayListOf<Station>()
+                        stationList.filter { it.name.toLowerCase().contains(charString) }
+                                .forEach { filteredList.add(it) }
+                        filteredList /* the list is filtered */
+                    }
+                }
+                // Assign the data to the FilterResults
                 filterResults.values = filteredStationList
                 return filterResults
             }
 
             override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults?) {
-                filteredStationList = filterResults?.values as ArrayList<Station>
+                filteredStationList = filterResults?.values as ArrayList<Station> /* no need to check cast*/
                 Log.d(tag, filteredStationList.toString())
                 notifyDataSetChanged()
             }

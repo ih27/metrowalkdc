@@ -1,3 +1,5 @@
 package co.swatisi.team.metrowalkdc.model
 
-data class Station(val name: String, val lat: Double, val lon: Double)
+data class Station(val name: String, val lat: Double, val lon: Double): Comparable<Station> {
+    override fun compareTo(other: Station) = name.compareTo(other.name)
+}

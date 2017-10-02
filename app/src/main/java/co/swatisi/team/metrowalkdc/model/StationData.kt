@@ -7,9 +7,9 @@ object StationData {
     // ArrayList variable to hold metro stations data
     private var stationList = arrayListOf<Station>()
 
-    // Get the metro station list
-    fun stationList(): ArrayList<Station> {
-        return stationList
+    // Get the metro station list, sorted by name
+    fun stationList(): List<Station> {
+        return stationList.sortedBy { it }
     }
 
     // Given the JSON object, update the metro station list

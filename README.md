@@ -4,7 +4,6 @@ by Ismayil and Swati
 
 # TODO #
 
-* Utilize the App Bar for menu functionality in your MetroStationActivity to allow the user to type a few letters to filter the station list
 * Utilize the App Bar for menu functionality in your LandmarkDetailActivity to provide buttons to favorite and share
 * Persist favorited Landmarks using SharedPreferences
 * Share functionality should use an Implicit Intent
@@ -19,6 +18,7 @@ by Ismayil and Swati
 * Don't forget to create a custom app launcher icon and include it at multiple resolutions
 
 # DONE #
+Utilize the App Bar for menu functionality in your MetroStationActivity to allow the user to type a few letters to filter the station list
 
 Detect the device's location
 

@@ -12,7 +12,6 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
-import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import co.swatisi.team.metrowalkdc.utility.FetchLandmarksManager
@@ -187,32 +186,36 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             val landmarks = fetchLandmarksManager.getLandmarksList()
             Log.d(tag, "Landmarks: ${landmarks.toString()}")
 
-            if (landmarks != null) {
+            // Landmarks JSON object empty check
+            if (landmarks != null && landmarks.entrySet().size != 0) {
                 // Success fetching
                 activityUiThread {
-                    if (landmarks.get("total").asInt != 0) {
+                    if (landmarks.get("total")?.asInt != 0) {
                         // One or more landmarks returned
                         // Check if we have the landmark data
                         if (LandmarkData.landmarkList().isEmpty()) {
                             LandmarkData.updateList(landmarks)
                         }
-                        // Hide the ProgressDialog
-                        progressDialog?.dismiss()
                         // Show the list
                         populateRecyclerView()
                     } else {
                         // Zero landmarks within the radius
-                        // Hide the ProgressDialog
-                        progressDialog?.dismiss()
                         finish()
                         toast("No landmarks within ${Constants.RADIUS}m")
 
                         // TODO: Perhaps ask user to increase the radius?!
                     }
+                    // Hide the ProgressDialog
+                    progressDialog?.dismiss()
                 }
             } else {
                 // Failure fetching
-                Log.e(tag, "Something wrong with fetching landmarks")
+                activityUiThread {
+                    finish()
+                    toast("Something wrong with fetching landmarks")
+                    // Hide the ProgressDialog
+                    progressDialog?.dismiss()
+                }
             }
         }
     }

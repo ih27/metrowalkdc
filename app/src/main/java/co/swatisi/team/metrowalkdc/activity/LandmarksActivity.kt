@@ -2,7 +2,9 @@ package co.swatisi.team.metrowalkdc.activity
 
 import android.Manifest
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.provider.Settings
@@ -18,9 +20,11 @@ import co.swatisi.team.metrowalkdc.utility.FetchLandmarksManager
 import co.swatisi.team.metrowalkdc.adapter.LandmarksAdapter
 import co.swatisi.team.metrowalkdc.utility.LocationDetector
 import co.swatisi.team.metrowalkdc.R
+import co.swatisi.team.metrowalkdc.model.Landmark
 import co.swatisi.team.metrowalkdc.model.LandmarkData
 import co.swatisi.team.metrowalkdc.model.StationData
 import co.swatisi.team.metrowalkdc.utility.Constants
+import co.swatisi.team.metrowalkdc.utility.PersistenceManager
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_landmarks.*
 import org.jetbrains.anko.*
@@ -43,10 +47,13 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
     private var progressDialog: ProgressDialog? = null
 
+    private lateinit var persistenceManager: PersistenceManager
+    private lateinit var recyclerViewList: List<Landmark>
+
     private val onItemClickListener = object : LandmarksAdapter.OnItemClickListener {
         override fun onItemClick(view: View, position: Int) {
             val intent = Intent(this@LandmarksActivity, LandmarkDetailActivity::class.java)
-            val landmark = LandmarkData.landmarkList()[position]
+            val landmark = recyclerViewList[position]
             intent.putExtra("landmark", landmark)
             // Start the LandmarkDetailActivity with the selected landmark passed
             startActivity(intent)
@@ -57,11 +64,15 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landmarks)
 
-        // Check if coming from MetroStationsActivity
+        // Check where the user is coming from
         if(intent.hasExtra("latitude") || intent.hasExtra("longitude")) {
             val metroLat = intent.getDoubleExtra("latitude", 0.0)
             val metroLon = intent.getDoubleExtra("longitude", 0.0)
             getLandmarksAndShow(metroLat, metroLon)
+        } else if(intent.hasExtra("favorites")) {
+            // Get the persistence manager for favorites functionality
+            persistenceManager = PersistenceManager(this)
+            getFavoritesAndShow()
         } else {
             // Closest station needed, so location permission check initiated
             getLocationPermission()
@@ -167,13 +178,24 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         return Pair(stationList[minIndex].lat, stationList[minIndex].lon)
     }
 
-    private fun populateRecyclerView() {
+    private fun populateRecyclerView(isFavorites: Boolean) {
         staggeredLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         landmarksList.layoutManager = staggeredLayoutManager
-
         adapter = LandmarksAdapter(this)
+
+        if(isFavorites) {
+            recyclerViewList = getFavoritesList()
+            adapter.setFavoritesList(recyclerViewList)
+        } else {
+            recyclerViewList = LandmarkData.landmarkList()
+        }
+
         landmarksList.adapter = adapter
         adapter.setOnItemClickListener(onItemClickListener)
+    }
+
+    private fun getFavoritesList(): List<Landmark> {
+        return persistenceManager.fetchFavorites()
     }
 
     private fun getLandmarksAndShow(lat: Double, lon: Double) {
@@ -197,7 +219,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
                             LandmarkData.updateList(landmarks)
                         }
                         // Show the list
-                        populateRecyclerView()
+                        populateRecyclerView(false)
                     } else {
                         // Zero landmarks within the radius
                         finish()
@@ -213,6 +235,35 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
                 activityUiThread {
                     finish()
                     toast("Something wrong with fetching landmarks")
+                    // Hide the ProgressDialog
+                    progressDialog?.dismiss()
+                }
+            }
+        }
+    }
+
+    private fun getFavoritesAndShow() {
+        // Show ProgressDialog
+        showProgressWhileWaiting()
+
+        doAsync {
+            val landmarks = getFavoritesList()
+            Log.d(tag, "Landmarks: $landmarks")
+
+            // Favorites empty check
+            if (landmarks.isNotEmpty()) {
+                // Success fetching
+                activityUiThread {
+                    // Show the list
+                    populateRecyclerView(true)
+                    // Hide the ProgressDialog
+                    progressDialog?.dismiss()
+                }
+            } else {
+                // No favorites
+                activityUiThread {
+                    finish()
+                    toast("There is no saved landmarks to show")
                     // Hide the ProgressDialog
                     progressDialog?.dismiss()
                 }

@@ -2,18 +2,23 @@ package co.swatisi.team.metrowalkdc.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import co.swatisi.team.metrowalkdc.R
+import co.swatisi.team.metrowalkdc.model.Landmark
 import co.swatisi.team.metrowalkdc.model.LandmarkData
+import co.swatisi.team.metrowalkdc.model.Station
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_landmarks.view.*
 
 
 class LandmarksAdapter(private val context: Context) : RecyclerView.Adapter<LandmarksAdapter.ViewHolder>() {
-
+    private val tag = "LandmarksAdapter"
     lateinit var itemClickListener: OnItemClickListener
+    private val landmarkList = LandmarkData.landmarkList().toMutableList() as List<Landmark>
+    private var filteredLandmarklist = landmarkList
 
     fun setOnItemClickListener(itemClickListener: OnItemClickListener) {
         this.itemClickListener = itemClickListener
@@ -25,7 +30,7 @@ class LandmarksAdapter(private val context: Context) : RecyclerView.Adapter<Land
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        val landmark = LandmarkData.landmarkList()[position]
+        val landmark = filteredLandmarklist[position]
 
         // Set the name, rating, distance and image dynamically
         holder?.itemView?.landmark_name?.text = landmark.name
@@ -39,7 +44,7 @@ class LandmarksAdapter(private val context: Context) : RecyclerView.Adapter<Land
         holder?.itemView?.landmark_image?.contentDescription = landmark.id
     }
 
-    override fun getItemCount() = LandmarkData.landmarkList().size
+    override fun getItemCount() = filteredLandmarklist.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         init {
@@ -47,6 +52,12 @@ class LandmarksAdapter(private val context: Context) : RecyclerView.Adapter<Land
         }
 
         override fun onClick(view: View) = itemClickListener.onItemClick(itemView, adapterPosition)
+    }
+
+    fun setFavoritesList(favorites: List<Landmark>) {
+        filteredLandmarklist = favorites
+        Log.d(tag, filteredLandmarklist.toString())
+        notifyDataSetChanged()
     }
 
     interface OnItemClickListener {

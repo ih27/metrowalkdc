@@ -16,6 +16,7 @@ class MenuActivity : AppCompatActivity() {
         // Get the metro stations
         FetchMetroStationsManager.getStationList(this)
 
+        // Set the OnClickListeners for each button
         stations_button.setOnClickListener {
             val intent = Intent(this, MetroStationsActivity::class.java)
             startActivity(intent)
@@ -23,6 +24,12 @@ class MenuActivity : AppCompatActivity() {
 
         closest_station_button.setOnClickListener {
             val intent = Intent(this, LandmarksActivity::class.java)
+            startActivity(intent)
+        }
+
+        favorite_landmarks_button.setOnClickListener {
+            val intent = Intent(this, LandmarksActivity::class.java)
+            intent.putExtra("favorites", true)
             startActivity(intent)
         }
 

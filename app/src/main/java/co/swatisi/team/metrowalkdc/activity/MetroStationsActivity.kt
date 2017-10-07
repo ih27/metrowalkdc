@@ -53,8 +53,8 @@ class MetroStationsActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.options_menu, menu)
+        // Inflate the menu; this adds items to the action bar if it is present
+        menuInflater.inflate(R.menu.search_menu, menu)
         this.menu = menu
 
         // Associate searchable configuration with the SearchView

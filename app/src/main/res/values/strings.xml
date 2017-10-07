@@ -8,7 +8,7 @@
     <string name="landmark_name">Landmark Name</string>
     <string name="landmark_miles_text">%.2f miles away</string>
     <string name="landmark_detail_name">Landmark Name</string>
-    <string name="landmark_detail_review">Review</string>
+    <string name="landmark_detail_review">Review: %d</string>
     <string name="landmark_detail_affordability">Affordability</string>
     <string name="landmark_detail_type">Landmark Type</string>
     <string name="landmark_detail_timing">Working Hours</string>

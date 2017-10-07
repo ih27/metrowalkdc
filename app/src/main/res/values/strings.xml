@@ -17,5 +17,9 @@
     <string name="landmark_detail_address">Address</string>
     <string name="search_title">Search</string>
     <string name="search_hint">Find a station</string>
+    <string name="favorite_menu_title">Favorite</string>
+    <string name="share_menu_title">Share</string>
+    <string name="share_intent_title">Share the landmark...</string>
+    <string name="share_mime_type">text/plain</string>
 
 </resources>

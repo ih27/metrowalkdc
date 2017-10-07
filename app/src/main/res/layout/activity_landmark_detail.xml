@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="co.swatisi.team.metrowalkdc.activity.LandmarkDetailActivity">
-
-    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="co.swatisi.team.metrowalkdc.activity.LandmarkDetailActivity"
         android:id="@+id/landmark_detail_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,113 +9,114 @@
         android:orientation="vertical"
         android:baselineAligned="false">
 
-        <LinearLayout
-            android:id="@+id/landmark_detail_image_holder"
-            android:layout_width="fill_parent"
-            android:layout_height="250dp">
+    <LinearLayout
+        android:id="@+id/landmark_detail_image_holder"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp">
 
-            <ImageView
-                android:id="@+id/landmark_detail_image"
-                android:contentDescription="@string/landmark_image_description"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background" />
+        <ImageView
+            android:id="@+id/landmark_detail_image"
+            android:contentDescription="@string/landmark_image_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background" />
 
-        </LinearLayout>
+    </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/landmark_detail_text_holder"
+    <LinearLayout
+        android:id="@+id/landmark_detail_text_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/landmark_detail_name"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp">
+            android:text="@string/landmark_detail_name"
+            android:textAppearance="?android:textAppearanceLarge" />
 
-            <TextView
-                android:id="@+id/landmark_detail_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/landmark_detail_name"
-                android:textAppearance="?android:textAppearanceLarge" />
+        <RatingBar
+            android:id="@+id/landmark_detail_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            style="?android:ratingBarStyleSmall"
+            android:rating="1"/>
 
-            <RatingBar
-                android:id="@+id/landmark_detail_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                style="?android:ratingBarStyleSmall"
-                android:rating="1"/>
+        <TextView
+            android:id="@+id/landmark_detail_review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="@string/landmark_detail_review"/>
 
-            <TextView
-                android:id="@+id/landmark_detail_review"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:text="@string/landmark_detail_review"/>
+        <TextView
+            android:id="@+id/landmark_detail_affordability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="@string/landmark_detail_affordability"/>
 
-            <TextView
-                android:id="@+id/landmark_detail_affordability"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:text="@string/landmark_detail_affordability"/>
+        <TextView
+            android:id="@+id/landmark_detail_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="@string/landmark_detail_type"/>
 
-            <TextView
-                android:id="@+id/landmark_detail_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:text="@string/landmark_detail_type"/>
-
-            <TextView
-                android:id="@+id/landmark_detail_timing"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:text="@string/landmark_detail_timing"/>
+        <TextView
+            android:id="@+id/landmark_detail_timing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="@string/landmark_detail_timing"/>
 
 
-            <!--<TextView-->
-                <!--android:id="@+id/landmark_detail_distance"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginStart="16dp"-->
-                <!--android:text="@string/distance_miles_away"-->
-                <!--android:textAppearance="?android:textAppearanceMedium" />-->
-            <!---->
-            <TextView
-                android:id="@+id/landmark_detail_pnumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:text="@string/landmark_detail_pnumber"/>
+        <!--<TextView-->
+            <!--android:id="@+id/landmark_detail_distance"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:text="@string/distance_miles_away"-->
+            <!--android:textAppearance="?android:textAppearanceMedium" />-->
+        <!---->
+        <TextView
+            android:id="@+id/landmark_detail_pnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="@string/landmark_detail_pnumber"/>
 
-            <TextView
-                android:id="@+id/landmark_detail_website"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:text="@string/landmark_detail_website"/>
+        <TextView
+            android:id="@+id/landmark_detail_website"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:clickable="true"
+            android:focusable="true"
+            android:linksClickable="true"
+            android:text="@string/landmark_detail_website"/>
 
-            <TextView
-                android:id="@+id/landmark_detail_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:text="@string/landmark_detail_address"/>
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/landmark_detail_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="@string/landmark_detail_address"/>
 
     </LinearLayout>
 

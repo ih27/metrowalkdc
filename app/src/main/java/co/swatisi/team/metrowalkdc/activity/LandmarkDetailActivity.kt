@@ -4,13 +4,14 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.support.v7.widget.ShareActionProvider
 import co.swatisi.team.metrowalkdc.R
 import co.swatisi.team.metrowalkdc.model.Landmark
 import co.swatisi.team.metrowalkdc.utility.PersistenceManager
 import kotlinx.android.synthetic.main.activity_landmark_detail.*
 import android.content.Intent
-import android.support.v4.view.MenuItemCompat
+import android.text.Html
+import android.text.method.LinkMovementMethod
+import co.swatisi.team.metrowalkdc.utility.Constants
 
 
 class LandmarkDetailActivity : AppCompatActivity() {
@@ -19,7 +20,6 @@ class LandmarkDetailActivity : AppCompatActivity() {
     private var isFavorite = false
     private lateinit var landmark: Landmark
     private lateinit var persistenceManager: PersistenceManager
-    private var shareActionProvider: ShareActionProvider? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +29,7 @@ class LandmarkDetailActivity : AppCompatActivity() {
         landmark = intent.getParcelableExtra<Landmark>("landmark")
 
         // Set the values
-        landmark_detail_name.text = landmark.name
-        landmark_detail_rating.rating = landmark.rating.toFloat()
-        landmark_detail_review.text = String.format(getString(R.string.landmark_detail_review,
-                landmark.reviewCount))
+        setLayoutValues()
 
         // Get the persistence manager for favorites functionality
         persistenceManager = PersistenceManager(this)
@@ -47,12 +44,6 @@ class LandmarkDetailActivity : AppCompatActivity() {
         if(persistenceManager.isFavorite(landmark))
             favoriteButtonOn()
 
-        // Locate MenuItem with ShareActionProvider
-        val shareButton = menu.findItem(R.id.share_menu_item)
-        // Fetch and store ShareActionProvider
-        shareActionProvider = MenuItemCompat.getActionProvider(shareButton) as ShareActionProvider
-        setShareIntent()
-
         return true
     }
 
@@ -63,10 +54,36 @@ class LandmarkDetailActivity : AppCompatActivity() {
                 toggle()
                 true
             }
+            R.id.share_menu_item -> {
+                // Share button clicked
+                chooseSharingApp()
+                true
+            }
             else ->
                 // The action is not recognized
                 super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun setLayoutValues() {
+        landmark_detail_name.text = landmark.name
+        landmark_detail_rating.rating = landmark.rating.toFloat()
+        landmark_detail_review.text = String.format(getString(R.string.landmark_detail_review,
+                landmark.reviewCount))
+        landmark_detail_website.text = Html.fromHtml(String.format(getString(R.string.landmark_detail_website,
+                Constants.LANDMARK_URLBASE + landmark.id)))
+        landmark_detail_website.movementMethod = LinkMovementMethod.getInstance()
+        landmark_detail_address.text = String.format(getString(R.string.landmark_detail_address,
+                landmark.displayAddress))
+    }
+
+    private fun chooseSharingApp() {
+        // Share button implicit intent
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.type = getString(R.string.share_mime_type)
+        shareIntent.putExtra(Intent.EXTRA_TEXT, landmark.textToShare())
+        startActivity(Intent.createChooser(shareIntent, resources.getText(R.string.share_intent_title)))
     }
 
     private fun toggle() {
@@ -97,15 +114,5 @@ class LandmarkDetailActivity : AppCompatActivity() {
         val item = menu.findItem(R.id.favorite_menu_item)
         item.setIcon(R.drawable.ic_favorite_off)
         isFavorite = false
-    }
-
-    // Call to set the share intent
-    private fun setShareIntent() {
-        // Share button implicit intent
-        val shareIntent = Intent()
-        shareIntent.action = Intent.ACTION_SEND
-        shareIntent.type = getString(R.string.share_mime_type)
-        shareIntent.putExtra(Intent.EXTRA_TEXT, landmark.textToShare())
-        shareActionProvider?.setShareIntent(shareIntent)
     }
 }

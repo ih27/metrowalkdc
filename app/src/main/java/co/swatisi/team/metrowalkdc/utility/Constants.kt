@@ -19,6 +19,7 @@ object Constants {
     const val SORT_BY = "rating"
     const val LIMIT = "10"
     const val MILES_CONVERSION = 0.000625
+    const val LANDMARK_URLBASE = "https://www.yelp.com/biz/"
 
     val FAVORITES_PREF_KEY = "FAVORITES"
 

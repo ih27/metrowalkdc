@@ -13,13 +13,13 @@
     <string name="landmark_detail_type">Landmark Type</string>
     <string name="landmark_detail_timing">Working Hours</string>
     <string name="landmark_detail_pnumber">Phone Number</string>
-    <string name="landmark_detail_website">Website URL</string>
-    <string name="landmark_detail_address">Address</string>
+    <string name="landmark_detail_website">&lt;a href=\&quot;%s\&quot;>Website&lt;/a></string>
+    <string name="landmark_detail_address">Address: %s</string>
     <string name="search_title">Search</string>
     <string name="search_hint">Find a station</string>
     <string name="favorite_menu_title">Favorite</string>
     <string name="share_menu_title">Share</string>
-    <string name="share_intent_title">Share the landmark...</string>
+    <string name="share_intent_title">Share the landmark&#8230;</string>
     <string name="share_mime_type">text/plain</string>
 
 </resources>

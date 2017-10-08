@@ -26,13 +26,14 @@
 
     <LinearLayout
         android:id="@+id/landmark_detail_text_holder"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp">
 
         <TextView
             android:id="@+id/landmark_detail_name"
@@ -58,30 +59,21 @@
             android:textAppearance="?android:textAppearanceMedium"
             android:text="@string/landmark_detail_review"/>
 
-        <TextView
-            android:id="@+id/landmark_detail_affordability"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:text="@string/landmark_detail_affordability"/>
+        <!--<TextView-->
+            <!--android:id="@+id/landmark_detail_affordability"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:textAppearance="?android:textAppearanceMedium"-->
+            <!--android:text="@string/landmark_detail_affordability"/>-->
 
-        <TextView
-            android:id="@+id/landmark_detail_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:text="@string/landmark_detail_type"/>
-
-        <TextView
-            android:id="@+id/landmark_detail_timing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:text="@string/landmark_detail_timing"/>
-
+        <!--<TextView-->
+            <!--android:id="@+id/landmark_detail_type"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:textAppearance="?android:textAppearanceMedium"-->
+            <!--android:text="@string/landmark_detail_type"/>-->
 
         <!--<TextView-->
             <!--android:id="@+id/landmark_detail_distance"-->
@@ -92,12 +84,13 @@
             <!--android:textAppearance="?android:textAppearanceMedium" />-->
         <!---->
         <TextView
-            android:id="@+id/landmark_detail_pnumber"
+            android:id="@+id/landmark_detail_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:textAppearance="?android:textAppearanceMedium"
-            android:text="@string/landmark_detail_pnumber"/>
+            android:autoLink="phone"
+            android:text="@string/landmark_detail_phone"/>
 
         <TextView
             android:id="@+id/landmark_detail_website"
@@ -117,6 +110,14 @@
             android:layout_marginStart="16dp"
             android:textAppearance="?android:textAppearanceMedium"
             android:text="@string/landmark_detail_address"/>
+
+        <TextView
+            android:id="@+id/landmark_detail_timing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text=""/>
 
     </LinearLayout>
 

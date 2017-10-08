@@ -38,7 +38,7 @@ class LandmarksAdapter(private val context: Context) : RecyclerView.Adapter<Land
         holder?.itemView?.landmark_distance?.text = String.format(
                 context.getString(R.string.landmark_miles_text, landmark.distance))
         // Load only if the image URL exists
-        if (landmark.imageURL.toString().isNotEmpty()) {
+        if (landmark.imageURL.isNotEmpty()) {
             Picasso.with(context).load(landmark.imageURL).into(holder?.itemView?.landmark_image)
         }
         holder?.itemView?.landmark_image?.contentDescription = landmark.id

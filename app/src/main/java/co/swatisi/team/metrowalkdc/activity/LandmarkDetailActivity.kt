@@ -7,11 +7,15 @@ import android.view.MenuItem
 import co.swatisi.team.metrowalkdc.R
 import co.swatisi.team.metrowalkdc.model.Landmark
 import co.swatisi.team.metrowalkdc.utility.PersistenceManager
+import co.swatisi.team.metrowalkdc.utility.FetchLandmarksManager
 import kotlinx.android.synthetic.main.activity_landmark_detail.*
 import android.content.Intent
+import android.graphics.Color
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.view.View
 import co.swatisi.team.metrowalkdc.utility.Constants
+import com.squareup.picasso.Picasso
 
 
 class LandmarkDetailActivity : AppCompatActivity() {
@@ -20,19 +24,21 @@ class LandmarkDetailActivity : AppCompatActivity() {
     private var isFavorite = false
     private lateinit var landmark: Landmark
     private lateinit var persistenceManager: PersistenceManager
+    private lateinit var fetchLandmarksManager: FetchLandmarksManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landmark_detail)
 
         // Obtain landmark from intent
-        landmark = intent.getParcelableExtra<Landmark>("landmark")
+        landmark = intent.getParcelableExtra("landmark")
 
-        // Set the values
-        setLayoutValues()
-
-        // Get the persistence manager for favorites functionality
+        // Get the required managers
         persistenceManager = PersistenceManager(this)
+        fetchLandmarksManager = FetchLandmarksManager(this)
+
+        // Set the layout
+        setLayoutValues()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -65,18 +71,41 @@ class LandmarkDetailActivity : AppCompatActivity() {
         }
     }
 
+    // Set the layout elements
     private fun setLayoutValues() {
+        // Load only if the image URL exists
+        if (landmark.imageURL.isNotEmpty()) {
+            Picasso.with(this).load(landmark.imageURL).into(landmark_detail_image)
+        }
+        landmark_detail_image.contentDescription = landmark.id
         landmark_detail_name.text = landmark.name
         landmark_detail_rating.rating = landmark.rating.toFloat()
         landmark_detail_review.text = String.format(getString(R.string.landmark_detail_review,
                 landmark.reviewCount))
+        // Display the phone number if the landmark has it
+        if (landmark.displayPhone.isEmpty()) {
+            landmark_detail_phone.visibility = View.GONE
+        } else {
+            landmark_detail_phone.text = String.format(getString(R.string.landmark_detail_phone, landmark.displayPhone))
+        }
+        // Clickable URL with a simple text "Website"
         landmark_detail_website.text = Html.fromHtml(String.format(getString(R.string.landmark_detail_website,
                 Constants.LANDMARK_URLBASE + landmark.id)))
         landmark_detail_website.movementMethod = LinkMovementMethod.getInstance()
         landmark_detail_address.text = String.format(getString(R.string.landmark_detail_address,
                 landmark.displayAddress))
+
+        // Is the landmark open now?
+        if (fetchLandmarksManager.isOpenNow(landmark.id)) {
+            landmark_detail_timing.text = getString(R.string.landmark_detail_open)
+            landmark_detail_timing.setTextColor(Color.GREEN)
+        } else {
+            landmark_detail_timing.text = getString(R.string.landmark_detail_closed)
+            landmark_detail_timing.setTextColor(Color.RED)
+        }
     }
 
+    // Present the user a sharing app chooser
     private fun chooseSharingApp() {
         // Share button implicit intent
         val shareIntent = Intent()
@@ -86,6 +115,7 @@ class LandmarkDetailActivity : AppCompatActivity() {
         startActivity(Intent.createChooser(shareIntent, resources.getText(R.string.share_intent_title)))
     }
 
+    // General toggle switch for favorite button
     private fun toggle() {
         if (isFavorite) {
             removeFavorite(landmark)
@@ -104,12 +134,14 @@ class LandmarkDetailActivity : AppCompatActivity() {
         persistenceManager.saveLandmark(landmark)
     }
 
+    // Set the favorite button and flag to on
     private fun favoriteButtonOn() {
         val item = menu.findItem(R.id.favorite_menu_item)
         item.setIcon(R.drawable.ic_favorite_on)
         isFavorite = true
     }
 
+    // Set the favorite button and flag to off
     private fun favoriteButtonOff() {
         val item = menu.findItem(R.id.favorite_menu_item)
         item.setIcon(R.drawable.ic_favorite_off)

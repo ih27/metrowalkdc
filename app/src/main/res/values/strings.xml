@@ -11,8 +11,7 @@
     <string name="landmark_detail_review">Review: %d</string>
     <string name="landmark_detail_affordability">Affordability</string>
     <string name="landmark_detail_type">Landmark Type</string>
-    <string name="landmark_detail_timing">Working Hours</string>
-    <string name="landmark_detail_pnumber">Phone Number</string>
+    <string name="landmark_detail_phone">Phone Number: %s</string>
     <string name="landmark_detail_website">&lt;a href=\&quot;%s\&quot;>Website&lt;/a></string>
     <string name="landmark_detail_address">Address: %s</string>
     <string name="search_title">Search</string>
@@ -21,5 +20,7 @@
     <string name="share_menu_title">Share</string>
     <string name="share_intent_title">Share the landmark&#8230;</string>
     <string name="share_mime_type">text/plain</string>
+    <string name="landmark_detail_open">OPEN</string>
+    <string name="landmark_detail_closed">CLOSED</string>
 
 </resources>

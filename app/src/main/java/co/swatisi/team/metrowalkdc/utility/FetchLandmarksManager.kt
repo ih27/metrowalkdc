@@ -34,19 +34,22 @@ class FetchLandmarksManager(val context: Context, private val lat: Double = 0.0,
         return jsonLandmarks
     }
 
-    fun getLandmark(id: String): Landmark? {
-        var landmark: Landmark? = null
+    fun isOpenNow(id: String): Boolean {
+        var isOpen = false
         try {
             val jsonLandmark = Ion.with(context).load(String.format(Constants.YELP_LANDMARK_API,id))
                     .addHeader("Authorization", Constants.YELP_API_TOKEN)
                     .asJsonObject().get()
             jsonLandmark?.let {
-                landmark = LandmarkData.getLandmark(jsonLandmark)
-                Log.d(tag, "$landmark")
+                val hours = jsonLandmark.getAsJsonArray("hours")
+                hours?.let {
+                    isOpen = hours[0].asJsonObject.get("is_open_now").asBoolean
+                    Log.d(tag, "$id : $isOpen")
+                }
             }
         } catch (e: Exception) {
-            Log.e(tag, e.message)
+            Log.e(tag, "$id : ${e.message}")
         }
-        return landmark
+        return isOpen
     }
 }

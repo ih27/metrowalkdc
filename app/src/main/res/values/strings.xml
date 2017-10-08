@@ -22,5 +22,6 @@
     <string name="share_mime_type">text/plain</string>
     <string name="landmark_detail_open">OPEN</string>
     <string name="landmark_detail_closed">CLOSED</string>
+    <string name="directions_error">Google Maps is not installed.</string>
 
 </resources>

@@ -4,14 +4,14 @@ by Ismayil and Swati
 
 # TODO #
 
-* Walking directions functionality should use an Explicit Intent
-* Get walking directions
 * Never crash or leave user in a bad state! If something goes wrong, present a helpful Dialog to the user
 * Support portrait and landscape mode (UI components should not be cut off if user switches to landscape) and prevent this rotation from destroying the activity (recommendation is to provide both a portrait and landscape XML layout for each screen and to utilize onSaveInstanceState)
 * Support 2 languages (English and a language of your choice - use http://translate.google.com if you don't know another language). You don't need to dynamically translate JSON WMATA or Yelp data, but you should have translations for your app title, settings screen labels, etc.. For example, you don't need translations for the phrase "Foggy Bottom" that comes from the JSON.
 * Don't forget to create a custom app launcher icon and include it at multiple resolutions
 
 # DONE #
+Walking directions functionality should use an Explicit Intent
+
 Share functionality should use an Implicit Intent
 
 Utilize the App Bar for menu functionality in your LandmarkDetailActivity to provide buttons to favorite and share

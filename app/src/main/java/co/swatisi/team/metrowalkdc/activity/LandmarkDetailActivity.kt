@@ -11,11 +11,13 @@ import co.swatisi.team.metrowalkdc.utility.FetchLandmarksManager
 import kotlinx.android.synthetic.main.activity_landmark_detail.*
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.View
 import co.swatisi.team.metrowalkdc.utility.Constants
 import com.squareup.picasso.Picasso
+import org.jetbrains.anko.toast
 
 
 class LandmarkDetailActivity : AppCompatActivity() {
@@ -146,5 +148,17 @@ class LandmarkDetailActivity : AppCompatActivity() {
         val item = menu.findItem(R.id.favorite_menu_item)
         item.setIcon(R.drawable.ic_favorite_off)
         isFavorite = false
+    }
+
+    // Start Google Maps walking mode navigation when clicked on the icon
+    fun startDirections(view: View) {
+        val gmmIntentUri = Uri.parse("google.navigation:q=${landmark.lat},${landmark.lon}&mode=w")
+        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+        mapIntent.`package` = "com.google.android.apps.maps"
+        if (mapIntent.resolveActivity(packageManager) != null) {
+            startActivity(mapIntent)
+        } else {
+            toast(getString(R.string.directions_error))
+        }
     }
 }

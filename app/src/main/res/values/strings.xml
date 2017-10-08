@@ -23,5 +23,6 @@
     <string name="landmark_detail_open">OPEN</string>
     <string name="landmark_detail_closed">CLOSED</string>
     <string name="directions_error">Google Maps is not installed.</string>
+    <string name="landmark_maps_icon_description">Navigate to</string>
 
 </resources>

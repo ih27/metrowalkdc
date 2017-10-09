@@ -17,6 +17,8 @@ import android.text.method.LinkMovementMethod
 import android.view.View
 import co.swatisi.team.metrowalkdc.utility.Constants
 import com.squareup.picasso.Picasso
+import org.jetbrains.anko.activityUiThread
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 
 
@@ -97,13 +99,21 @@ class LandmarkDetailActivity : AppCompatActivity() {
         landmark_detail_address.text = String.format(getString(R.string.landmark_detail_address,
                 landmark.displayAddress))
 
-        // Is the landmark open now?
-        if (fetchLandmarksManager.isOpenNow(landmark.id)) {
-            landmark_detail_timing.text = getString(R.string.landmark_detail_open)
-            landmark_detail_timing.setTextColor(Color.GREEN)
-        } else {
-            landmark_detail_timing.text = getString(R.string.landmark_detail_closed)
-            landmark_detail_timing.setTextColor(Color.RED)
+        doAsync {
+            val isOpen = fetchLandmarksManager.isOpenNow(landmark.id)
+            activityUiThread {
+                // Is the landmark open now?
+                if (isOpen) {
+                    landmark_detail_timing.text = getString(R.string.landmark_detail_open)
+                    landmark_detail_timing.setTextColor(Color.GREEN)
+                } else {
+                    landmark_detail_timing.text = getString(R.string.landmark_detail_closed)
+                    landmark_detail_timing.setTextColor(Color.RED)
+                }
+
+                // Hide the ProgressBar
+                landmark_detail_progress_bar.visibility = View.GONE
+            }
         }
     }
 

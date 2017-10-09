@@ -1,9 +1,13 @@
 package co.swatisi.team.metrowalkdc.utility
 
 import android.content.Context
+import android.content.Intent
 import android.location.Location
 import android.location.LocationManager
+import android.provider.Settings
+import android.support.v4.content.ContextCompat.startActivity
 import android.util.Log
+import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -16,6 +20,16 @@ class LocationDetector(val context: Context, private val fusedLocationClient: Fu
     private var lastLocation: Location? = null
 
     var locationCompletionListener: LocationCompletionListener? = null
+
+    init {
+        // Send to location settings page in case the location services are turned off
+        if (!isLocationServiceEnabled()) {
+            Toast.makeText(context, "Please enable the Location Services and try again",
+                    Toast.LENGTH_LONG).show()
+            val locationSettingsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            context.startActivity(locationSettingsIntent)
+        }
+    }
 
     interface LocationCompletionListener {
         fun locationKnown()
@@ -71,7 +85,7 @@ class LocationDetector(val context: Context, private val fusedLocationClient: Fu
     }
 
     // Check if the location services are turned off
-    fun isLocationServiceEnabled(): Boolean {
+    private fun isLocationServiceEnabled(): Boolean {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         var gpsEnabled = false
         var networkEnabled = false

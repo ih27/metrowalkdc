@@ -5,17 +5,17 @@ import com.google.gson.JsonObject
 import java.util.ArrayList
 
 object LandmarkData {
-    // ArrayList variable to hold landmarks data
-    private var landmarkList: ArrayList<Landmark> = arrayListOf()
+    // List variable to hold landmarks data
+    private var landmarkList: MutableList<Landmark> = mutableListOf()
 
     // Get the landmarks list
-    fun landmarkList(): ArrayList<Landmark> {
+    fun landmarkList(): MutableList<Landmark> {
         return landmarkList
     }
 
     // Given the JSON object, update the landmarks list
     fun updateList(jsonObject: JsonObject) {
-        landmarkList = arrayListOf()
+        landmarkList = mutableListOf()
         val jsonArray = jsonObject.getAsJsonArray("businesses")
         for (i in 0 until jsonArray.size()) {
             val id = jsonArray.get(i).asJsonObject.get("id").asString

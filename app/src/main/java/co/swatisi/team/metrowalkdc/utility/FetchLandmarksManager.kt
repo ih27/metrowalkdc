@@ -1,7 +1,6 @@
 package co.swatisi.team.metrowalkdc.utility
 
 import android.content.Context
-import android.net.Uri
 import android.util.Log
 import co.swatisi.team.metrowalkdc.model.Landmark
 import co.swatisi.team.metrowalkdc.model.LandmarkData
@@ -12,7 +11,31 @@ class FetchLandmarksManager(val context: Context, private val lat: Double = 0.0,
 
     private val tag = "FetchLandmarks"
 
-    fun getLandmarksList(): JsonObject? {
+    fun fetchLandmarks(): List<Landmark> {
+        var list = mutableListOf<Landmark>()
+        val landmarks = getLandmarksList()
+        Log.d(tag, "Landmarks: $landmarks")
+
+        // Landmarks JSON object empty check
+        if (landmarks.entrySet().size != 0) {
+            // Success fetching
+            if (landmarks.get("total")?.asInt != 0) {
+                // One or more landmarks returned
+                // Check if we have the landmark data
+                if (LandmarkData.landmarkList().isEmpty()) {
+                    LandmarkData.updateList(landmarks)
+                }
+                // Assign the list
+                list = LandmarkData.landmarkList()
+            }
+            // Zero landmark within the radius
+        }
+        // Failure fetching, so the list is still empty
+
+        return list
+    }
+
+    private fun getLandmarksList(): JsonObject {
         var jsonLandmarks = JsonObject()
         try {
             jsonLandmarks = Ion.with(context).load(Constants.YELP_SEARCH_API)

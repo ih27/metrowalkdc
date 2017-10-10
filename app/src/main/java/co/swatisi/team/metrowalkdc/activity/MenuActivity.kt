@@ -32,6 +32,5 @@ class MenuActivity : AppCompatActivity() {
             intent.putExtra("favorites", true)
             startActivity(intent)
         }
-
-  }
+    }
 }

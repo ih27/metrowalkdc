@@ -6,9 +6,9 @@ import co.swatisi.team.metrowalkdc.model.Landmark
 import co.swatisi.team.metrowalkdc.model.LandmarkData
 import com.google.gson.JsonObject
 import com.koushikdutta.ion.Ion
+import kotlin.coroutines.experimental.suspendCoroutine
 
 class FetchLandmarksManager(val context: Context, private val lat: Double = 0.0, private val lon: Double = 0.0) {
-
     private val tag = "FetchLandmarks"
 
     fun fetchLandmarks(): List<Landmark> {
@@ -36,10 +36,13 @@ class FetchLandmarksManager(val context: Context, private val lat: Double = 0.0,
     }
 
     private fun getLandmarksList(): JsonObject {
+        // Get Yelp Auth Token
+        val yelpAuthToken = YelpAuthManager.getToken(context)
+
         var jsonLandmarks = JsonObject()
         try {
             jsonLandmarks = Ion.with(context).load(Constants.YELP_SEARCH_API)
-                    .addHeader("Authorization", Constants.YELP_API_TOKEN)
+                    .addHeader("Authorization", yelpAuthToken)
                     .addQuery("latitude", lat.toString())
                     .addQuery("longitude", lon.toString())
                     .addQuery("radius", Constants.RADIUS)
@@ -58,10 +61,13 @@ class FetchLandmarksManager(val context: Context, private val lat: Double = 0.0,
     }
 
     fun isOpenNow(id: String): Boolean {
+        // Get Yelp Auth Token
+        val yelpAuthToken = YelpAuthManager.getToken(context)
+
         var isOpen = false
         try {
             val jsonLandmark = Ion.with(context).load(String.format(Constants.YELP_LANDMARK_API,id))
-                    .addHeader("Authorization", Constants.YELP_API_TOKEN)
+                    .addHeader("Authorization", yelpAuthToken)
                     .asJsonObject().get()
             jsonLandmark?.let {
                 val hours = jsonLandmark.getAsJsonArray("hours")

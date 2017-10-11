@@ -55,25 +55,30 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
         // Check whether we're recreating a previously destroyed instance
         if (savedInstanceState != null) {
+            // Restore the label
+            supportActionBar?.title = savedInstanceState.getString(Constants.LANDMARKS_LABEL_KEY)
             // Restore value of list and populate the view
-            recyclerViewList = savedInstanceState.getParcelableArrayList("list")
+            recyclerViewList = savedInstanceState.getParcelableArrayList(Constants.LANDMARKS_LIST_KEY)
             populateRecyclerView(recyclerViewList)
             // Hide the ProgressBar
             landmarks_progress_bar.visibility = View.GONE
         } else {
             // Check where the user is coming from
             if(intent.hasExtra("latitude") || intent.hasExtra("longitude")) {
-                functionality = "metro"
+                functionality = getString(R.string.landmark_functionality_metro)
+                supportActionBar?.title = getString(R.string.metro_station_landmarks_activity_label)
                 val metroLat = intent.getDoubleExtra("latitude", 0.0)
                 val metroLon = intent.getDoubleExtra("longitude", 0.0)
                 getLandmarksAndShow(metroLat, metroLon)
             } else if(intent.hasExtra("favorites")) {
-                functionality = "favorites"
+                functionality = getString(R.string.landmark_functionality_favorites)
+                supportActionBar?.title = getString(R.string.favorites_landmarks_activity_label)
                 // Get the persistence manager for favorites functionality
                 persistenceManager = PersistenceManager(this)
                 getFavoritesAndShow()
             } else {
-                functionality = "closest"
+                functionality = getString(R.string.landmark_functionality_closest)
+                supportActionBar?.title = getString(R.string.closest_station_landmarks_activity_label)
                 // Closest station needed, so location permission check initiated
                 getLocationPermission()
             }
@@ -90,7 +95,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         }
 
         // If it is the favorites list, repopulate the view in case a favorite is deleted
-        if (functionality == "favorites") {
+        if (functionality == getString(R.string.landmark_functionality_favorites)) {
             getFavoritesAndShow()
         }
     }
@@ -106,7 +111,9 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putParcelableArrayList("list", ArrayList<Landmark>(recyclerViewList))
+        outState?.putParcelableArrayList(Constants.LANDMARKS_LIST_KEY,
+                ArrayList<Landmark>(recyclerViewList))
+        outState?.putString(Constants.LANDMARKS_LABEL_KEY, supportActionBar?.title.toString())
         super.onSaveInstanceState(outState)
     }
 

@@ -24,5 +24,14 @@
     <string name="landmark_detail_closed">CLOSED</string>
     <string name="directions_error">Google Maps is not installed.</string>
     <string name="landmark_maps_icon_description">Navigate to</string>
+    <string name="menu_activity_label">Main Menu</string>
+    <string name="metro_stations_activity_label">Metro Stations</string>
+    <string name="landmark_detail_activity_label">Landmark Info</string>
+    <string name="closest_station_landmarks_activity_label">Closest Station Landmarks</string>
+    <string name="metro_station_landmarks_activity_label">Metro Station Landmarks</string>
+    <string name="favorites_landmarks_activity_label">Favorite Landmarks</string>
+    <string name="landmark_functionality_metro">metro</string>
+    <string name="landmark_functionality_favorites">favorites</string>
+    <string name="landmark_functionality_closest">closest</string>
 
 </resources>

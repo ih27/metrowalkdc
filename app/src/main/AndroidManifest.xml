@@ -9,21 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MenuActivity">
+        <activity   android:name=".activity.MenuActivity"
+                    android:label="@string/menu_activity_label">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MetroStationsActivity">
+        <activity   android:name=".activity.MetroStationsActivity"
+                    android:label="@string/metro_stations_activity_label">
 
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
 
         </activity>
         <activity android:name=".activity.LandmarksActivity" />
-        <activity android:name=".activity.LandmarkDetailActivity" />
+        <activity   android:name=".activity.LandmarkDetailActivity"
+                    android:label="@string/landmark_detail_activity_label"/>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

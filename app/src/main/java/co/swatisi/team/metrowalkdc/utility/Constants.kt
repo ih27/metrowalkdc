@@ -28,4 +28,6 @@ object Constants {
     const val LANDMARK_URLBASE = "https://www.yelp.com/biz/"
 
     const val FAVORITES_PREF_KEY = "FAVORITES"
+    const val LANDMARKS_LABEL_KEY = "LABEL"
+    const val LANDMARKS_LIST_KEY = "LIST"
 }

@@ -2,7 +2,6 @@ package co.swatisi.team.metrowalkdc.model
 
 import co.swatisi.team.metrowalkdc.utility.Constants
 import com.google.gson.JsonObject
-import java.util.ArrayList
 
 object LandmarkData {
     // List variable to hold landmarks data
@@ -33,29 +32,6 @@ object LandmarkData {
             val reviewCount = jsonArray.get(i).asJsonObject.get("review_count").asInt
             val landmark = Landmark(id, name, imageUrl, address, phone, lat, lon, rating, reviewCount, distance)
             landmarkList.add(landmark)
-        }
-    }
-
-    // Given the JSON object, return a landmark
-    fun getLandmark(jsonObject: JsonObject): Landmark {
-        val id = jsonObject.get("id").asString
-        val name = jsonObject.get("name").asString
-        val imageUrl = jsonObject.get("image_url").asString
-        val address = jsonObject.get("location").asJsonObject
-                .getAsJsonArray("display_address").get(0).asString
-        val phone = jsonObject.get("display_phone").asString
-        val coordinates = jsonObject.get("coordinates")
-        val lat = coordinates.asJsonObject.get("latitude").asDouble
-        val lon = coordinates.asJsonObject.get("longitude").asDouble
-        val rating = jsonObject.get("rating").asDouble
-        val reviewCount = jsonObject.get("review_count").asInt
-        return Landmark(id, name, imageUrl, address, phone, lat, lon, rating, reviewCount)
-    }
-
-    // Given the coordinates, get the landmark
-    fun getLandmark(lat: Double, lon: Double): Landmark? {
-        return landmarkList.find {
-            it.lat == lat && it.lon == lon
         }
     }
 }

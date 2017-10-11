@@ -65,7 +65,7 @@ class MetroStationsActivity : AppCompatActivity() {
                     // Hide the ProgressBar
                     stations_progress_bar.visibility = View.GONE
                 } else {
-                    toast("No metro stations to show.")
+                    toast(getString(R.string.metro_stations_list_empty_error))
                     finish()
                 }
             }

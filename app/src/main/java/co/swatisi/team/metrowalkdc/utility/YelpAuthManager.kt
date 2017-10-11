@@ -5,7 +5,6 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.koushikdutta.ion.Ion
-import java.util.concurrent.Future
 
 object YelpAuthManager {
     private val tag = "YelpAuthManager"

@@ -36,5 +36,6 @@
     <string name="station_line_code_1_description">Line Code 1</string>
     <string name="station_line_code_2_description">Line Code 2</string>
     <string name="station_line_code_3_description">Line Code 3</string>
+    <string name="metro_stations_list_empty_error">Metro stations list is empty.</string>
 
 </resources>

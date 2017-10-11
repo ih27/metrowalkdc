@@ -14,7 +14,6 @@ import co.swatisi.team.metrowalkdc.adapter.LandmarksAdapter
 import co.swatisi.team.metrowalkdc.R
 import co.swatisi.team.metrowalkdc.model.Landmark
 import co.swatisi.team.metrowalkdc.model.Station
-import co.swatisi.team.metrowalkdc.model.StationData
 import co.swatisi.team.metrowalkdc.utility.*
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_landmarks.*
@@ -140,7 +139,8 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
                     // Hide the ProgressBar
                     landmarks_progress_bar.visibility = View.GONE
                 } else {
-                    toast("No landmarks to show.")
+                    val distance = (Constants.RADIUS.toInt() * Constants.MILES_CONVERSION).toInt().toString()
+                            toast("No landmarks within $distance miles.")
                     finish()
                 }
             }
@@ -164,7 +164,9 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
     }
 
     // Utility function to get the coordinates for the closest metro station
-    private fun getClosestStationCoordinates(): Pair<Double, Double> {
+    private fun getClosestStationCoordinates(): Pair<Double, Double>? {
+        // Metro stations list is empty
+        if (stationList.isEmpty()) return null
         // Iterate over the metro stations list to find the closest
         var minDistance = Double.MAX_VALUE
         var minIndex = 0
@@ -232,15 +234,15 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
     override fun locationKnown() {
         selectedLocation = locationDetector?.getLastLocation()
 
-        // First, check if the metro station list is available
-//        if (stationList.isEmpty()) {
-//            // Get the metro stations
-//            fetchMetroStationsManager.getStationList(this)
-//        }
-
         if (selectedLocation != null) {
-            val (closestLat, closestLon) = getClosestStationCoordinates()
-            getLandmarksAndShow(closestLat, closestLon)
+            val closestLat = getClosestStationCoordinates()?.component1()
+            val closestLon = getClosestStationCoordinates()?.component2()
+            if (closestLat != null && closestLon != null) getLandmarksAndShow(closestLat, closestLon)
+            else {
+                toast(getString(R.string.metro_stations_list_empty_error))
+                finish()
+            }
+
         } else {
             toast("We still have no location.")
             finish()

@@ -30,7 +30,7 @@ class FetchMetroStationsManager(val context: Context) {
         return list
     }
 
-    fun getStationList(context: Context): JsonObject {
+    private fun getStationList(context: Context): JsonObject {
         var jsonStations = JsonObject()
         try {
             jsonStations = Ion.with(context).load(Constants.METRO_API)

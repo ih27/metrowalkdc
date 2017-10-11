@@ -28,7 +28,7 @@ class PersistenceManager(context: Context) {
     fun fetchFavorites(): List<Landmark> {
         val favoritesJson = sharedPreferences.getString(Constants.FAVORITES_PREF_KEY, null)
         return if(favoritesJson == null) {
-            arrayListOf<Landmark>()
+            arrayListOf()
         } else {
             val favoritesType = object : TypeToken<MutableList<Landmark>>() {}.type
             Gson().fromJson(favoritesJson, favoritesType)

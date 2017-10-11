@@ -5,7 +5,6 @@ import android.content.Intent
 import android.location.Location
 import android.location.LocationManager
 import android.provider.Settings
-import android.support.v4.content.ContextCompat.startActivity
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient

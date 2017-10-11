@@ -37,6 +37,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
     private lateinit var persistenceManager: PersistenceManager
     private var recyclerViewList: List<Landmark> = listOf()
+    private var functionality = ""
 
     private val onItemClickListener = object : LandmarksAdapter.OnItemClickListener {
         override fun onItemClick(view: View, position: Int) {
@@ -62,14 +63,17 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         } else {
             // Check where the user is coming from
             if(intent.hasExtra("latitude") || intent.hasExtra("longitude")) {
+                functionality = "metro"
                 val metroLat = intent.getDoubleExtra("latitude", 0.0)
                 val metroLon = intent.getDoubleExtra("longitude", 0.0)
                 getLandmarksAndShow(metroLat, metroLon)
             } else if(intent.hasExtra("favorites")) {
+                functionality = "favorites"
                 // Get the persistence manager for favorites functionality
                 persistenceManager = PersistenceManager(this)
                 getFavoritesAndShow()
             } else {
+                functionality = "closest"
                 // Closest station needed, so location permission check initiated
                 getLocationPermission()
             }
@@ -83,6 +87,11 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         if (!requestingLocationUpdates && locationDetector != null) {
             locationDetector?.startLocationUpdates()
             requestingLocationUpdates = true
+        }
+
+        // If it is the favorites list, repopulate the view in case a favorite is deleted
+        if (functionality == "favorites") {
+            getFavoritesAndShow()
         }
     }
 

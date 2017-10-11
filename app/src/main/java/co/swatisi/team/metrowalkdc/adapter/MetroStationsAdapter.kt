@@ -1,5 +1,8 @@
 package co.swatisi.team.metrowalkdc.adapter
 
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,15 +12,17 @@ import android.widget.Filter
 import android.widget.Filterable
 import co.swatisi.team.metrowalkdc.R
 import co.swatisi.team.metrowalkdc.model.Station
-import co.swatisi.team.metrowalkdc.model.StationData
 import kotlinx.android.synthetic.main.row_stations.view.*
-import java.util.ArrayList
 
-class MetroStationsAdapter : RecyclerView.Adapter<MetroStationsAdapter.ViewHolder>(), Filterable {
+class MetroStationsAdapter(private val stationList: List<Station>) :
+        RecyclerView.Adapter<MetroStationsAdapter.ViewHolder>(), Filterable {
     private val tag = "MetroStationsAdapter"
     lateinit var itemClickListener: OnItemClickListener
-    private val stationList = StationData.stationList().toMutableList() as ArrayList<Station>
     private var filteredStationList = stationList
+
+    private val colorHash = hashMapOf("RD" to Color.RED, "BL" to Color.BLUE,
+            "YL" to Color.YELLOW, "GR" to Color.GREEN, "SV" to Color.rgb(192, 192, 192),
+            "OR" to Color.rgb(255, 165, 0))
 
     fun setOnItemClickListener(itemClickListener: OnItemClickListener) {
         this.itemClickListener = itemClickListener
@@ -31,14 +36,28 @@ class MetroStationsAdapter : RecyclerView.Adapter<MetroStationsAdapter.ViewHolde
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         val station = filteredStationList[position]
-        holder?.itemView?.stationName?.text = station.name
+        holder?.itemView?.station_name?.text = station.name
+
+        // Set the metro line colors
+        /* Kotlin hash maps have no way to null-check */
+        holder?.itemView?.station_line_code_1?.drawable?.colorFilter =
+                PorterDuffColorFilter(colorHash[station.lineCode1]!!, PorterDuff.Mode.MULTIPLY)
+        if (station.lineCode2.isNotBlank())
+            holder?.itemView?.station_line_code_2?.drawable?.colorFilter =
+                    PorterDuffColorFilter(colorHash[station.lineCode2]!!, PorterDuff.Mode.MULTIPLY)
+        else holder?.itemView?.station_line_code_2?.visibility = View.GONE
+
+        if (station.lineCode3.isNotBlank())
+            holder?.itemView?.station_line_code_3?.drawable?.colorFilter =
+                    PorterDuffColorFilter(colorHash[station.lineCode3]!!, PorterDuff.Mode.MULTIPLY)
+        else holder?.itemView?.station_line_code_3?.visibility = View.GONE
     }
 
     override fun getItemCount() = filteredStationList.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         init {
-            itemView.stationHolder.setOnClickListener(this)
+            itemView.station_holder.setOnClickListener(this)
         }
 
         override fun onClick(view: View) = itemClickListener.onItemClick(itemView, adapterPosition,
@@ -66,7 +85,7 @@ class MetroStationsAdapter : RecyclerView.Adapter<MetroStationsAdapter.ViewHolde
             }
 
             override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults?) {
-                filteredStationList = filterResults?.values as ArrayList<Station> /* no need to check cast*/
+                filteredStationList = filterResults?.values as List<Station> /* no need to check cast*/
                 Log.d(tag, filteredStationList.toString())
                 notifyDataSetChanged()
             }
@@ -74,6 +93,6 @@ class MetroStationsAdapter : RecyclerView.Adapter<MetroStationsAdapter.ViewHolde
     }
 
     interface OnItemClickListener {
-        fun onItemClick(view: View, position: Int, filteredList: ArrayList<Station>)
+        fun onItemClick(view: View, position: Int, filteredList: List<Station>)
     }
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList
 
 object LandmarkData {
     // List variable to hold landmarks data
-    private var landmarkList: MutableList<Landmark> = mutableListOf()
+    private var landmarkList = mutableListOf<Landmark>()
 
     // Get the landmarks list
     fun landmarkList(): MutableList<Landmark> {

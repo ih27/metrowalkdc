@@ -6,7 +6,6 @@ import co.swatisi.team.metrowalkdc.model.Landmark
 import co.swatisi.team.metrowalkdc.model.LandmarkData
 import com.google.gson.JsonObject
 import com.koushikdutta.ion.Ion
-import kotlin.coroutines.experimental.suspendCoroutine
 
 class FetchLandmarksManager(val context: Context, private val lat: Double = 0.0, private val lon: Double = 0.0) {
     private val tag = "FetchLandmarks"

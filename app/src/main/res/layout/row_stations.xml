@@ -1,34 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/stationCard"
+    android:id="@+id/station_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
 
     <!-- Used for the ripple effect on touch -->
     <LinearLayout
-        android:id="@+id/stationHolder"
+        android:id="@+id/station_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:selectableItemBackground"
         android:orientation="horizontal" />
 
     <LinearLayout
-        android:id="@+id/stationNameHolder"
+        android:id="@+id/station_name_holder"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="56dp"
         android:layout_gravity="bottom"
         android:orientation="horizontal">
 
+        <LinearLayout
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="top">
+
+            <ImageView
+                android:id="@+id/station_line_code_1"
+                android:src="@drawable/ic_station_line_code"
+                android:scaleType="center"
+                android:contentDescription="@string/station_line_code_1_description"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"/>
+
+            <ImageView
+                android:id="@+id/station_line_code_2"
+                android:src="@drawable/ic_station_line_code"
+                android:scaleType="center"
+                android:contentDescription="@string/station_line_code_2_description"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"/>
+
+            <ImageView
+                android:id="@+id/station_line_code_3"
+                android:src="@drawable/ic_station_line_code"
+                android:scaleType="center"
+                android:contentDescription="@string/station_line_code_3_description"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp" />
+
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/stationName"
-            android:layout_width="match_parent"
+            android:id="@+id/station_name"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="start"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
 
     </LinearLayout>
 

@@ -13,6 +13,7 @@ import android.view.View
 import co.swatisi.team.metrowalkdc.adapter.LandmarksAdapter
 import co.swatisi.team.metrowalkdc.R
 import co.swatisi.team.metrowalkdc.model.Landmark
+import co.swatisi.team.metrowalkdc.model.Station
 import co.swatisi.team.metrowalkdc.model.StationData
 import co.swatisi.team.metrowalkdc.utility.*
 import com.google.android.gms.location.*
@@ -31,9 +32,10 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
     private var locationDetector: LocationDetector? = null
     private lateinit var fetchLandmarksManager: FetchLandmarksManager
+    private lateinit var fetchMetroStationsManager: FetchMetroStationsManager
     private lateinit var staggeredLayoutManager: StaggeredGridLayoutManager
     private lateinit var adapter: LandmarksAdapter
-    private var stationList = StationData.stationList()
+    private lateinit var stationList: List<Station>
 
     private lateinit var persistenceManager: PersistenceManager
     private var recyclerViewList: List<Landmark> = listOf()
@@ -58,7 +60,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             // Restore the label
             supportActionBar?.title = savedInstanceState.getString(Constants.LANDMARKS_LABEL_KEY)
             // Restore value of list and populate the view
-            recyclerViewList = savedInstanceState.getParcelableArrayList(Constants.LANDMARKS_LIST_KEY)
+            recyclerViewList = savedInstanceState.getParcelableArrayList(Constants.LIST_KEY)
             populateRecyclerView(recyclerViewList)
             // Hide the ProgressBar
             landmarks_progress_bar.visibility = View.GONE
@@ -79,6 +81,8 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             } else {
                 functionality = getString(R.string.landmark_functionality_closest)
                 supportActionBar?.title = getString(R.string.closest_station_landmarks_activity_label)
+                fetchMetroStationsManager = FetchMetroStationsManager(this@LandmarksActivity)
+                stationList = fetchMetroStationsManager.fetchStations()
                 // Closest station needed, so location permission check initiated
                 getLocationPermission()
             }
@@ -111,8 +115,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putParcelableArrayList(Constants.LANDMARKS_LIST_KEY,
-                ArrayList<Landmark>(recyclerViewList))
+        outState?.putParcelableArrayList(Constants.LIST_KEY, ArrayList<Landmark>(recyclerViewList))
         outState?.putString(Constants.LANDMARKS_LABEL_KEY, supportActionBar?.title.toString())
         super.onSaveInstanceState(outState)
     }
@@ -160,7 +163,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         }
     }
 
-    // Get the coordinates for the closest metro station
+    // Utility function to get the coordinates for the closest metro station
     private fun getClosestStationCoordinates(): Pair<Double, Double> {
         // Iterate over the metro stations list to find the closest
         var minDistance = Double.MAX_VALUE
@@ -230,10 +233,10 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         selectedLocation = locationDetector?.getLastLocation()
 
         // First, check if the metro station list is available
-        if (stationList.isEmpty()) {
-            // Get the metro stations
-            FetchMetroStationsManager.getStationList(this)
-        }
+//        if (stationList.isEmpty()) {
+//            // Get the metro stations
+//            fetchMetroStationsManager.getStationList(this)
+//        }
 
         if (selectedLocation != null) {
             val (closestLat, closestLon) = getClosestStationCoordinates()

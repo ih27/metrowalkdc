@@ -33,5 +33,8 @@
     <string name="landmark_functionality_metro">metro</string>
     <string name="landmark_functionality_favorites">favorites</string>
     <string name="landmark_functionality_closest">closest</string>
+    <string name="station_line_code_1_description">Line Code 1</string>
+    <string name="station_line_code_2_description">Line Code 2</string>
+    <string name="station_line_code_3_description">Line Code 3</string>
 
 </resources>

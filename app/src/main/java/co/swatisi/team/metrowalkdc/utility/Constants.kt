@@ -20,7 +20,7 @@ object Constants {
     //const val YELP_API_TOKEN = "Bearer Z4XQpK2rOdiyuruBtz6BAr9hDit9NmkEiav-EcEDr_" +
     //        "UkfrARs7nS900FcZ8nsG0URpIAlanZi7DaH7SoMxS7mgMD9ArpW5CzQp3NkiUp4YuHqQnRSdvmkqP9W2bIWXYx"
 
-    const val RADIUS = "1600" /* 1 mile = 1600 meters */
+    const val RADIUS = "3200" /* 1 mile = 1600 meters */
     const val CATEGORY = "landmarks"
     const val SORT_BY = "rating"
     const val LIMIT = "10"
@@ -29,5 +29,5 @@ object Constants {
 
     const val FAVORITES_PREF_KEY = "FAVORITES"
     const val LANDMARKS_LABEL_KEY = "LABEL"
-    const val LANDMARKS_LIST_KEY = "LIST"
+    const val LIST_KEY = "LIST"
 }

@@ -1,6 +1,5 @@
 package co.swatisi.team.metrowalkdc.model
 
-import android.net.Uri
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 

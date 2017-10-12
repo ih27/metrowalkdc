@@ -30,11 +30,11 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
     private var locationTracker: LocationTracker? = null
     private lateinit var fetchLandmarksManager: FetchLandmarksManager
     private lateinit var fetchMetroStationsManager: FetchMetroStationsManager
+    private lateinit var persistenceManager: PersistenceManager
     private lateinit var staggeredLayoutManager: StaggeredGridLayoutManager
     private lateinit var adapter: LandmarksAdapter
     private lateinit var stationList: List<Station>
 
-    private lateinit var persistenceManager: PersistenceManager
     private var recyclerViewList: List<Landmark> = listOf()
     private var functionality = ""
 

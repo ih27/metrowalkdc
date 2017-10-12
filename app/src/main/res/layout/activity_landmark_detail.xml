@@ -23,9 +23,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background" />
-
-
+            android:src="@drawable/ic_landmark_holder" />
     </LinearLayout>
 
     <LinearLayout
@@ -60,7 +58,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:onClick="startDirections"/>
-
         </LinearLayout>
 
         <RatingBar
@@ -78,7 +75,6 @@
             android:layout_marginStart="16dp"
             android:textAppearance="?android:textAppearanceMedium"
             android:text="@string/landmark_detail_review"/>
-
 
         <TextView
             android:id="@+id/landmark_detail_phone"
@@ -107,9 +103,6 @@
             android:layout_marginStart="16dp"
             android:textAppearance="?android:textAppearanceMedium"
             android:text="@string/landmark_detail_address"/>
-
-
-
     </LinearLayout>
 
 </LinearLayout>

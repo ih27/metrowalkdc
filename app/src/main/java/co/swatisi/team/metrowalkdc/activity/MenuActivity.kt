@@ -12,7 +12,7 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
-        // Set the OnClickListeners for each button
+        // Set the listeners for each button clicks
         stations_button.setOnClickListener {
             val intent = Intent(this, MetroStationsActivity::class.java)
             startActivity(intent)

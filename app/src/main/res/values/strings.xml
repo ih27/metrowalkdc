@@ -37,5 +37,11 @@
     <string name="station_line_code_2_description">Line Code 2</string>
     <string name="station_line_code_3_description">Line Code 3</string>
     <string name="metro_stations_list_empty_error">Metro stations list is empty.</string>
+    <string name="location_detector_gps_error">Couldn\'t determine GPS status</string>
+    <string name="location_detector_network_error">Couldn\'t determine Network location status</string>
+    <string name="location_detector_enable_services_message">Please enable the Location Services and try again</string>
+    <string name="null_location_error">We have no location.</string>
+    <string name="location_detector_no_permission_error">Location permission is not granted.</string>
+    <string name="location_detector_timeout_error">Location tracker timed out.</string>
 
 </resources>

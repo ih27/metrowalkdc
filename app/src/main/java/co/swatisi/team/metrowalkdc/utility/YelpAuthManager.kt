@@ -12,7 +12,7 @@ object YelpAuthManager {
     fun getToken(context: Context): String {
         var authToken = ""
         try {
-            val result = Ion.with(context).load(Constants.YELP_AUTH_API)
+            val result = Ion.with(context).load(Constants.YELP_AUTH_API).setTimeout(10 * 1000) // 10 secs
                     .setBodyParameter("grant_type", Constants.YELP_AUTH_GRANT_TYPE)
                     .setBodyParameter("client_id", Constants.YELP_AUTH_CLIENT_ID)
                     .setBodyParameter("client_secret", Constants.YELP_AUTH_CLIENT_SECRET)

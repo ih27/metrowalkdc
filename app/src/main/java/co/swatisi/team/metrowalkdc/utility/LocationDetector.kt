@@ -7,6 +7,7 @@ import android.location.LocationManager
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import co.swatisi.team.metrowalkdc.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -83,7 +84,7 @@ class LocationDetector(val context: Context, private val fusedLocationClient: Fu
         return lastLocation
     }
 
-    // Check if the location services are turned off
+    // Check if the location services are enabled
     private fun isLocationServiceEnabled(): Boolean {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         var gpsEnabled = false
@@ -92,13 +93,13 @@ class LocationDetector(val context: Context, private val fusedLocationClient: Fu
         try {
             gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         } catch (e: Exception) {
-            Log.e(tag, "Couldn't determine GPS status")
+            Log.e(tag, context.getString(R.string.location_detector_gps_error))
         }
 
         try {
             networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
         } catch (e: Exception) {
-            Log.e(tag, "Couldn't determine Network location status")
+            Log.e(tag, context.getString(R.string.location_detector_network_error))
         }
 
         return gpsEnabled || networkEnabled

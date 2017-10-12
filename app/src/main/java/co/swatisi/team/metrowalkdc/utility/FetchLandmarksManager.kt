@@ -10,6 +10,7 @@ import com.koushikdutta.ion.Ion
 class FetchLandmarksManager(val context: Context, private val lat: Double = 0.0, private val lon: Double = 0.0) {
     private val tag = "FetchLandmarks"
 
+    // Return the list of landmarks or empty list
     fun fetchLandmarks(): List<Landmark> {
         var list = mutableListOf<Landmark>()
         val landmarks = getLandmarksList()
@@ -30,17 +31,17 @@ class FetchLandmarksManager(val context: Context, private val lat: Double = 0.0,
             // Zero landmark within the radius
         }
         // Failure fetching, so the list is still empty
-
         return list
     }
 
+    // Get the JSON landmarks list and parse it to the LandmarkData model
     private fun getLandmarksList(): JsonObject {
         // Get Yelp Auth Token
         val yelpAuthToken = YelpAuthManager.getToken(context)
 
         var jsonLandmarks = JsonObject()
         try {
-            jsonLandmarks = Ion.with(context).load(Constants.YELP_SEARCH_API)
+            jsonLandmarks = Ion.with(context).load(Constants.YELP_SEARCH_API).setTimeout(15 * 1000) // 15 secs
                     .addHeader("Authorization", yelpAuthToken)
                     .addQuery("latitude", lat.toString())
                     .addQuery("longitude", lon.toString())
@@ -57,27 +58,5 @@ class FetchLandmarksManager(val context: Context, private val lat: Double = 0.0,
             Log.e(tag, e.message)
         }
         return jsonLandmarks
-    }
-
-    fun isOpenNow(id: String): Boolean {
-        // Get Yelp Auth Token
-        val yelpAuthToken = YelpAuthManager.getToken(context)
-
-        var isOpen = false
-        try {
-            val jsonLandmark = Ion.with(context).load(String.format(Constants.YELP_LANDMARK_API,id))
-                    .addHeader("Authorization", yelpAuthToken)
-                    .asJsonObject().get()
-            jsonLandmark?.let {
-                val hours = jsonLandmark.getAsJsonArray("hours")
-                hours?.let {
-                    isOpen = hours[0].asJsonObject.get("is_open_now").asBoolean
-                    Log.d(tag, "$id : $isOpen")
-                }
-            }
-        } catch (e: Exception) {
-            Log.e(tag, "$id : ${e.message}")
-        }
-        return isOpen
     }
 }

@@ -10,26 +10,24 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
+import android.widget.Toast
 import co.swatisi.team.metrowalkdc.adapter.LandmarksAdapter
 import co.swatisi.team.metrowalkdc.R
 import co.swatisi.team.metrowalkdc.model.Landmark
 import co.swatisi.team.metrowalkdc.model.Station
 import co.swatisi.team.metrowalkdc.utility.*
-import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_landmarks.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.collections.*
 
 class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
-        LocationDetector.LocationCompletionListener {
+        LocationTracker.LocationListener {
 
     private val tag = "LandmarksActivity"
-    private var fusedLocationClient: FusedLocationProviderClient? = null
     private var selectedLocation: Location? = null
-    private var requestingLocationUpdates = false
     private var locationPermissionGranted = false
 
-    private var locationDetector: LocationDetector? = null
+    private var locationTracker: LocationTracker? = null
     private lateinit var fetchLandmarksManager: FetchLandmarksManager
     private lateinit var fetchMetroStationsManager: FetchMetroStationsManager
     private lateinit var staggeredLayoutManager: StaggeredGridLayoutManager
@@ -64,7 +62,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             // Hide the ProgressBar
             landmarks_progress_bar.visibility = View.GONE
         } else {
-            // Check where the user is coming from
+            // Check where the user is coming from and call the corresponding function
             if(intent.hasExtra("latitude") || intent.hasExtra("longitude")) {
                 functionality = getString(R.string.landmark_functionality_metro)
                 supportActionBar?.title = getString(R.string.metro_station_landmarks_activity_label)
@@ -80,10 +78,16 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             } else {
                 functionality = getString(R.string.landmark_functionality_closest)
                 supportActionBar?.title = getString(R.string.closest_station_landmarks_activity_label)
-                fetchMetroStationsManager = FetchMetroStationsManager(this@LandmarksActivity)
-                stationList = fetchMetroStationsManager.fetchStations()
-                // Closest station needed, so location permission check initiated
-                getLocationPermission()
+
+                doAsync {
+                    fetchMetroStationsManager = FetchMetroStationsManager(this@LandmarksActivity)
+                    stationList = fetchMetroStationsManager.fetchStations()
+
+                    activityUiThread {
+                        // Closest station needed, so location permission check initiated
+                        requestLocationPermission()
+                    }
+                }
             }
         }
     }
@@ -91,25 +95,9 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
     override fun onResume() {
         super.onResume()
 
-        // Start the location updates
-        if (!requestingLocationUpdates && locationDetector != null) {
-            locationDetector?.startLocationUpdates()
-            requestingLocationUpdates = true
-        }
-
         // If it is the favorites list, repopulate the view in case a favorite is deleted
         if (functionality == getString(R.string.landmark_functionality_favorites)) {
             getFavoritesAndShow()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        // Stop the location updates to save power consumption
-        if (requestingLocationUpdates && locationDetector != null) {
-            locationDetector?.stopLocationUpdates()
-            requestingLocationUpdates = false
         }
     }
 
@@ -119,6 +107,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         super.onSaveInstanceState(outState)
     }
 
+    // Set up the Recycler View
     private fun populateRecyclerView(list: List<Landmark>) {
         staggeredLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         landmarksList.layoutManager = staggeredLayoutManager
@@ -128,6 +117,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         adapter.setOnItemClickListener(onItemClickListener)
     }
 
+    // Get the landmarks list and populate the view
     private fun getLandmarksAndShow(lat: Double, lon: Double) {
         fetchLandmarksManager = FetchLandmarksManager(this@LandmarksActivity, lat, lon)
 
@@ -147,6 +137,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         }
     }
 
+    // Get the favorites list and populate the view
     private fun getFavoritesAndShow() {
         doAsync {
             recyclerViewList = persistenceManager.fetchFavorites()
@@ -183,11 +174,58 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         return Pair(stationList[minIndex].lat, stationList[minIndex].lon)
     }
 
+    // Set up the activity's components
+    private fun setUp() {
+        locationTracker = LocationTracker(this)
+        locationTracker?.locationListener = this
+
+        // Start the location tracking. Based on the callback, activity flow
+        locationTracker?.getLocation()
+    }
+
+    // Fires if the location is found
+    override fun locationFound(location: Location) {
+        //selectedLocation = locationDetector?.getLastLocation()
+        selectedLocation = location
+
+        if (selectedLocation != null) {
+            // Get the closest metro station coordinates
+            val closestLat = getClosestStationCoordinates()?.component1()
+            val closestLon = getClosestStationCoordinates()?.component2()
+            if (closestLat != null && closestLon != null) {
+                getLandmarksAndShow(closestLat, closestLon)
+            }
+            else {
+                toast(getString(R.string.metro_stations_list_empty_error))
+                finish()
+            }
+        } else {
+            toast(getString(R.string.null_location_error))
+            finish()
+        }
+    }
+
+    // Fires if there is an issue with the location
+    override fun locationNotFound(reason: LocationTracker.FailureReason) = when (reason) {
+        LocationTracker.FailureReason.TIMEOUT -> {
+            runOnUiThread {
+                Toast.makeText(this, getString(R.string.location_detector_timeout_error),
+                        Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+        LocationTracker.FailureReason.NO_PERMISSION -> {
+            Toast.makeText(this, getString(R.string.location_detector_no_permission_error),
+                    Toast.LENGTH_SHORT).show()
+            finish()
+        }
+    }
+
     /*
-     *  Location Permission Code
-     */
+ *  Location Permission Code
+ */
     // Request location permission, if not enabled
-    private fun getLocationPermission() {
+    private fun requestLocationPermission() {
         /*  The result of the runtime permission request is handled by a callback,
             onRequestPermissionsResult */
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -208,48 +246,16 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         if (requestCode == Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
             // Kotlin short if statement
             locationPermissionGranted = grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    grantResults.first() == PackageManager.PERMISSION_GRANTED
 
             // Based on the user selection either set up the activity
             // or finish it going back to the menu
-            if (locationPermissionGranted) setUp() else finish()
-        }
-    }
-
-    // Set up the activity's components
-    private fun setUp() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        locationDetector = LocationDetector(this, fusedLocationClient)
-        locationDetector?.locationCompletionListener = this
-
-        // Start the location updates
-        locationDetector?.startLocationUpdates()
-        requestingLocationUpdates = true
-
-        // LocationListener interface callbacks will determine the flow
-        // of the activity
-    }
-
-    // Run if the location is known
-    override fun locationKnown() {
-        selectedLocation = locationDetector?.getLastLocation()
-
-        if (selectedLocation != null) {
-            val closestLat = getClosestStationCoordinates()?.component1()
-            val closestLon = getClosestStationCoordinates()?.component2()
-            if (closestLat != null && closestLon != null) getLandmarksAndShow(closestLat, closestLon)
-            else {
-                toast(getString(R.string.metro_stations_list_empty_error))
+            if (locationPermissionGranted) {
+                setUp()
+            } else {
+                toast(getString(R.string.location_detector_no_permission_error))
                 finish()
             }
-
-        } else {
-            toast("We still have no location.")
-            finish()
         }
-    }
-
-    override fun locationUnknown() {
-        toast("Location is unknown")
     }
 }

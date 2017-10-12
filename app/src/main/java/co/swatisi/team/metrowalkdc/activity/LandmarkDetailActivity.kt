@@ -86,6 +86,7 @@ class LandmarkDetailActivity : AppCompatActivity() {
         landmark_detail_rating.rating = landmark.rating.toFloat()
         landmark_detail_review.text = String.format(getString(R.string.landmark_detail_review,
                 landmark.reviewCount))
+
         // Display the phone number if the landmark has it
         if (landmark.displayPhone.isEmpty()) {
             landmark_detail_phone.visibility = View.GONE
@@ -98,23 +99,6 @@ class LandmarkDetailActivity : AppCompatActivity() {
         landmark_detail_website.movementMethod = LinkMovementMethod.getInstance()
         landmark_detail_address.text = String.format(getString(R.string.landmark_detail_address,
                 landmark.displayAddress))
-
-        doAsync {
-            val isOpen = fetchLandmarksManager.isOpenNow(landmark.id)
-            activityUiThread {
-                // Is the landmark open now?
-                if (isOpen) {
-                    landmark_detail_timing.text = getString(R.string.landmark_detail_open)
-                    landmark_detail_timing.setTextColor(Color.GREEN)
-                } else {
-                    landmark_detail_timing.text = getString(R.string.landmark_detail_closed)
-                    landmark_detail_timing.setTextColor(Color.RED)
-                }
-
-                // Hide the ProgressBar
-                landmark_detail_progress_bar.visibility = View.GONE
-            }
-        }
     }
 
     // Present the user a sharing app chooser
@@ -138,10 +122,12 @@ class LandmarkDetailActivity : AppCompatActivity() {
         }
     }
 
+    // Remove the landmark from favorites
     private fun removeFavorite(landmark: Landmark) {
         persistenceManager.deleteLandmark(landmark)
     }
 
+    // Add the landmark as a favorite
     private fun addFavorite(landmark: Landmark) {
         persistenceManager.saveLandmark(landmark)
     }

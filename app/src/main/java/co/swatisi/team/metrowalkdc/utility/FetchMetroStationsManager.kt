@@ -11,6 +11,7 @@ class FetchMetroStationsManager(val context: Context) {
 
     private val tag = "FetchMetroStations"
 
+    // Return the list of metro stations or empty list
     fun fetchStations(): List<Station> {
         var list = listOf<Station>()
         val stations = getStationList(context)
@@ -26,14 +27,14 @@ class FetchMetroStationsManager(val context: Context) {
             list = StationData.stationList()
         }
         // Failure fetching, so the list is still empty
-
         return list
     }
 
+    // Get the JSON metro list and parse it to the StationData model
     private fun getStationList(context: Context): JsonObject {
         var jsonStations = JsonObject()
         try {
-            jsonStations = Ion.with(context).load(Constants.METRO_API)
+            jsonStations = Ion.with(context).load(Constants.METRO_API).setTimeout(5 * 1000) // 5 secs
                     .addHeader("api_key", Constants.METRO_API_TOKEN)
                     .asJsonObject().get()
             jsonStations?.let {

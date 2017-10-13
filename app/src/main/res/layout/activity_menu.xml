@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical"
+    android:background="@drawable/img_1363"
     tools:context="co.swatisi.team.metrowalkdc.activity.MenuActivity">
 
     <Button

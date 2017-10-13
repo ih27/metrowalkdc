@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +15,13 @@ import kotlinx.android.synthetic.main.row_stations.view.*
 
 class MetroStationsAdapter(private val stationList: List<Station>) :
         RecyclerView.Adapter<MetroStationsAdapter.ViewHolder>(), Filterable {
-    private val tag = "MetroStationsAdapter"
-    lateinit var itemClickListener: OnItemClickListener
-    private var filteredStationList = stationList
 
+    private var filteredStationList = stationList
     private val colorHash = hashMapOf("RD" to Color.RED, "BL" to Color.BLUE,
             "YL" to Color.YELLOW, "GR" to Color.GREEN, "SV" to Color.rgb(192, 192, 192),
             "OR" to Color.rgb(255, 165, 0))
+
+    private lateinit var itemClickListener: OnItemClickListener
 
     fun setOnItemClickListener(itemClickListener: OnItemClickListener) {
         this.itemClickListener = itemClickListener
@@ -86,7 +85,6 @@ class MetroStationsAdapter(private val stationList: List<Station>) :
 
             override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults?) {
                 filteredStationList = filterResults?.values as List<Station> /* no need to check cast*/
-                Log.d(tag, filteredStationList.toString())
                 notifyDataSetChanged()
             }
         }

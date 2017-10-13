@@ -14,7 +14,6 @@ class FetchLandmarksManager(val context: Context, private val lat: Double = 0.0,
     fun fetchLandmarks(): List<Landmark> {
         var list = mutableListOf<Landmark>()
         val landmarks = getLandmarksList()
-        Log.d(tag, "Landmarks: $landmarks")
 
         // Landmarks JSON object empty check
         if (landmarks.entrySet().size != 0) {
@@ -52,7 +51,6 @@ class FetchLandmarksManager(val context: Context, private val lat: Double = 0.0,
                     .asJsonObject().get()
             jsonLandmarks?.let {
                 LandmarkData.updateList(jsonLandmarks)
-                Log.d(tag, "Landmarks List Received.")
             }
         } catch (e: Exception) {
             Log.e(tag, e.message)

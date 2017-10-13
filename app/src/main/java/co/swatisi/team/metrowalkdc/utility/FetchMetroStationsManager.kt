@@ -39,7 +39,6 @@ class FetchMetroStationsManager(val context: Context) {
                     .asJsonObject().get()
             jsonStations?.let {
                 StationData.updateList(jsonStations)
-                Log.d(tag, "Station Data Updated.")
             }
         } catch (e: Exception) {
             Log.e(tag, e.message)

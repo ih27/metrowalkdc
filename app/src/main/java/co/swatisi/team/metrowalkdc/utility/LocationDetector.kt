@@ -13,8 +13,8 @@ import com.google.android.gms.location.*
 import java.util.*
 import kotlin.concurrent.timerTask
 
-class LocationTracker(val context: Context) {
-    private val tag = "LocationTracker"
+class LocationDetector(val context: Context) {
+    private val tag = "LocationDetector"
     private val fusedLocationClient = FusedLocationProviderClient(context)
 
     init {
@@ -27,7 +27,7 @@ class LocationTracker(val context: Context) {
         }
     }
 
-    // Reasons location tracking might fail
+    // Reasons location detector might fail
     enum class FailureReason {
         TIMEOUT,
         NO_PERMISSION
@@ -54,7 +54,7 @@ class LocationTracker(val context: Context) {
             // Create timer
             val timer = Timer()
 
-            //create location detection callback
+            // Create location detection callback
             val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult) {
                     // Stop location updates

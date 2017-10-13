@@ -21,22 +21,20 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.collections.*
 
 class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
-        LocationTracker.LocationListener {
+        LocationDetector.LocationListener {
 
-    private val tag = "LandmarksActivity"
     private var selectedLocation: Location? = null
     private var locationPermissionGranted = false
+    private var locationDetector: LocationDetector? = null
+    private var recyclerViewList: List<Landmark> = listOf()
+    private var functionality = ""
 
-    private var locationTracker: LocationTracker? = null
     private lateinit var fetchLandmarksManager: FetchLandmarksManager
     private lateinit var fetchMetroStationsManager: FetchMetroStationsManager
     private lateinit var persistenceManager: PersistenceManager
     private lateinit var staggeredLayoutManager: StaggeredGridLayoutManager
     private lateinit var adapter: LandmarksAdapter
     private lateinit var stationList: List<Station>
-
-    private var recyclerViewList: List<Landmark> = listOf()
-    private var functionality = ""
 
     private val onItemClickListener = object : LandmarksAdapter.OnItemClickListener {
         override fun onItemClick(view: View, position: Int) {
@@ -54,11 +52,14 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
         // Check whether we're recreating a previously destroyed instance
         if (savedInstanceState != null) {
-            // Restore the label
+            // Restore the label and functionality string
             supportActionBar?.title = savedInstanceState.getString(Constants.LANDMARKS_LABEL_KEY)
+            functionality = savedInstanceState.getString(Constants.FUNCTIONALITY_KEY)
+
             // Restore value of list and populate the view
             recyclerViewList = savedInstanceState.getParcelableArrayList(Constants.LIST_KEY)
             populateRecyclerView(recyclerViewList)
+
             // Hide the ProgressBar
             landmarks_progress_bar.visibility = View.GONE
         } else {
@@ -72,8 +73,6 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             } else if(intent.hasExtra("favorites")) {
                 functionality = getString(R.string.landmark_functionality_favorites)
                 supportActionBar?.title = getString(R.string.favorites_landmarks_activity_label)
-                // Get the persistence manager for favorites functionality
-                persistenceManager = PersistenceManager(this)
                 getFavoritesAndShow()
             } else {
                 functionality = getString(R.string.landmark_functionality_closest)
@@ -104,6 +103,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
     override fun onSaveInstanceState(outState: Bundle?) {
         outState?.putParcelableArrayList(Constants.LIST_KEY, ArrayList<Landmark>(recyclerViewList))
         outState?.putString(Constants.LANDMARKS_LABEL_KEY, supportActionBar?.title.toString())
+        outState?.putString(Constants.FUNCTIONALITY_KEY, functionality)
         super.onSaveInstanceState(outState)
     }
 
@@ -119,6 +119,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
     // Get the landmarks list and populate the view
     private fun getLandmarksAndShow(lat: Double, lon: Double) {
+        // Get the fetch landmarks manager
         fetchLandmarksManager = FetchLandmarksManager(this@LandmarksActivity, lat, lon)
 
         doAsync {
@@ -139,6 +140,9 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
     // Get the favorites list and populate the view
     private fun getFavoritesAndShow() {
+        // Get the persistence manager for favorites functionality
+        persistenceManager = PersistenceManager(this)
+
         doAsync {
             recyclerViewList = persistenceManager.fetchFavorites()
             activityUiThread {
@@ -176,11 +180,11 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
     // Set up the activity's components
     private fun setUp() {
-        locationTracker = LocationTracker(this)
-        locationTracker?.locationListener = this
+        locationDetector = LocationDetector(this)
+        locationDetector?.locationListener = this
 
-        // Start the location tracking. Based on the callback, activity flow
-        locationTracker?.getLocation()
+        // Start the location detector
+        locationDetector?.getLocation()
     }
 
     // Fires if the location is found
@@ -206,15 +210,15 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
     }
 
     // Fires if there is an issue with the location
-    override fun locationNotFound(reason: LocationTracker.FailureReason) = when (reason) {
-        LocationTracker.FailureReason.TIMEOUT -> {
+    override fun locationNotFound(reason: LocationDetector.FailureReason) = when (reason) {
+        LocationDetector.FailureReason.TIMEOUT -> {
             runOnUiThread {
                 Toast.makeText(this, getString(R.string.location_detector_timeout_error),
                         Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
-        LocationTracker.FailureReason.NO_PERMISSION -> {
+        LocationDetector.FailureReason.NO_PERMISSION -> {
             Toast.makeText(this, getString(R.string.location_detector_no_permission_error),
                     Toast.LENGTH_SHORT).show()
             finish()

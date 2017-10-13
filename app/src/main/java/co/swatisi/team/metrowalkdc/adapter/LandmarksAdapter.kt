@@ -10,11 +10,9 @@ import co.swatisi.team.metrowalkdc.model.Landmark
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_landmarks.view.*
 
-
 class LandmarksAdapter(private val context: Context, private val landmarkList: List<Landmark>) :
         RecyclerView.Adapter<LandmarksAdapter.ViewHolder>() {
-    private val tag = "LandmarksAdapter"
-    lateinit var itemClickListener: OnItemClickListener
+    private lateinit var itemClickListener: OnItemClickListener
 
     fun setOnItemClickListener(itemClickListener: OnItemClickListener) {
         this.itemClickListener = itemClickListener

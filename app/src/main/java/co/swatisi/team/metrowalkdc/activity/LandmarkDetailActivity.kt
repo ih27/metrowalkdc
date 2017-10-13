@@ -10,22 +10,18 @@ import co.swatisi.team.metrowalkdc.utility.PersistenceManager
 import co.swatisi.team.metrowalkdc.utility.FetchLandmarksManager
 import kotlinx.android.synthetic.main.activity_landmark_detail.*
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.View
 import co.swatisi.team.metrowalkdc.utility.Constants
 import com.squareup.picasso.Picasso
-import org.jetbrains.anko.activityUiThread
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 
-
 class LandmarkDetailActivity : AppCompatActivity() {
-    private val tag = "LandmarkDetailActivity"
-    private lateinit var menu: Menu
     private var isFavorite = false
+
+    private lateinit var menu: Menu
     private lateinit var landmark: Landmark
     private lateinit var persistenceManager: PersistenceManager
     private lateinit var fetchLandmarksManager: FetchLandmarksManager

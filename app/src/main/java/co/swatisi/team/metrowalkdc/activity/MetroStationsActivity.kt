@@ -20,13 +20,13 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 
 class MetroStationsActivity : AppCompatActivity() {
-    private val tag = "MetroStationsActivity"
-    private lateinit var menu: Menu
 
+    private var recyclerViewList: List<Station> = listOf()
+
+    private lateinit var menu: Menu
     private lateinit var fetchMetroStationsManager: FetchMetroStationsManager
     private lateinit var staggeredLayoutManager: StaggeredGridLayoutManager
     private lateinit var adapter: MetroStationsAdapter
-    private var recyclerViewList: List<Station> = listOf()
 
     private val onItemClickListener = object : MetroStationsAdapter.OnItemClickListener {
         override fun onItemClick(view: View, position: Int, filteredList: List<Station>) {

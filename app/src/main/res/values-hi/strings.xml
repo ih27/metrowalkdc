@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">मेट्रो चलना घ सी </string>
+    <string name="favorites_intent_extra_name">पसंदीदा</string>
+    <string name="landmarks_intent_extra_lat_name">अक्षांश</string>
+    <string name="landmarks_intent_extra_lon_name">देशान्तर</string>
+    <string name="landmark_detail_intent_extra_name">सीमा चिन्ह</string>
+    <string name="metro_stations">मेट्रो स्टेशन</string>
+    <string name="closest_station">निकटतम स्टेशन</string>
+    <string name="favorite_landmarks">पसंदीदा सीमा चिन्ह</string>
+    <string name="landmark_image_description">सीमा चिन्ह छवि</string>
+    <string name="distance_miles_away">मील की दूरी पर</string>
+    <string name="landmark_name">सीमा चिन्ह का नाम</string>
+    <string name="landmark_miles_text">%.2f मील की दूरी</string>
+    <string name="landmark_detail_name">सीमा चिन्ह का नाम</string>
+    <string name="landmark_detail_review">समीक्षा: %d</string>
+    <string name="landmark_detail_phone">फ़ोन नंबर: %s</string>
+    <string name="landmark_detail_website">&lt;a href=\&quot;%s\&quot;>वेबसाइट&lt;/a></string>
+    <string name="landmark_detail_address">पता: %s</string>
+    <string name="search_title">खोज</string>
+    <string name="search_hint">स्टेशन की खोज</string>
+    <string name="favorite_menu_title">पसंदीदा</string>
+    <string name="share_menu_title">साझा</string>
+    <string name="share_intent_title">साझा सीमा चिन्ह&#8230;</string>
+    <string name="share_mime_type">टेक्स्ट/समतल</string>
+    <string name="landmark_maps_icon_description">दिशा दिखाना</string>
+    <string name="station_line_code_1_description">रेखा कोड 1</string>
+    <string name="station_line_code_2_description">रेखा कोड 2</string>
+    <string name="station_line_code_3_description">रेखा कोड 3</string>
+    <string name="menu_activity_label">मुख्य मेन्यू </string>
+    <string name="metro_stations_activity_label">मेट्रो स्टेशन</string>
+    <string name="landmark_detail_activity_label">सीमा चिन्ह की जानकारी</string>
+    <string name="closest_station_landmarks_activity_label">निकटतम स्टेशन सीमा चिन्ह</string>
+    <string name="metro_station_landmarks_activity_label"> मेट्रो स्टेशन सीमा चिन्ह</string>
+    <string name="favorites_landmarks_activity_label">पसंदीदा सीमा चिन्ह</string>
+    <string name="landmark_functionality_metro">मेट्रो </string>
+    <string name="landmark_functionality_favorites">पसंदीदा</string>
+    <string name="landmark_functionality_closest">निकटतम</string>
+    <string name="directions_error">गूगल नक़्शे स्थापित नहीं हैं|</string>
+    <string name="metro_stations_list_empty_error">मेट्रो स्टेशन की सूची खाली है।</string>
+    <string name="location_detector_gps_error">जीपीएस स्थिति निर्धारित नहीं कर सका</string>
+    <string name="location_detector_network_error">नेटवर्क स्थान स्थिति का निर्धारण नहीं कर सका</string>
+    <string name="location_detector_no_permission_error">स्थान अनुमति नहीं दी गाई है|</string>
+    <string name="location_detector_timeout_error">स्थान डिटेक्टर का समय समाप्त हुआ |</string>
+    <string name="location_detector_enable_services_message">कृपया स्थान सेवाएं सक्षम करें और फिर से प्रयास करें</string>
+    <string name="null_location_error">हमारे पास कोई स्थान नहीं है |</string>
+    <string name="no_landmark_error"> सीमा चिन्ह  %d मील अंदर नहीं है |</string>
+    <string name="no_favorite_error">आपके पास पसंदीदा सीमा चिन्ह नहीं है |</string>
+</resources>

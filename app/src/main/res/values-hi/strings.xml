@@ -46,4 +46,5 @@
     <string name="null_location_error">हमारे पास कोई स्थान नहीं है |</string>
     <string name="no_landmark_error"> सीमा चिन्ह  %d मील अंदर नहीं है |</string>
     <string name="no_favorite_error">आपके पास पसंदीदा सीमा चिन्ह नहीं है |</string>
+
 </resources>

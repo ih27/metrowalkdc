@@ -47,8 +47,6 @@ class MetroStationsActivity : AppCompatActivity() {
             // Restore value of list and populate the view
             recyclerViewList = savedInstanceState.getParcelableArrayList(Constants.LIST_KEY)
             populateRecyclerView(recyclerViewList)
-            // Hide the ProgressBar
-            stations_progress_bar.visibility = View.GONE
         } else {
             getStationsAndShow()
         }
@@ -59,11 +57,10 @@ class MetroStationsActivity : AppCompatActivity() {
 
         doAsync {
             recyclerViewList = fetchMetroStationsManager.fetchStations()
+
             activityUiThread {
                 if (recyclerViewList.isNotEmpty()) {
                     populateRecyclerView(recyclerViewList)
-                    // Hide the ProgressBar
-                    stations_progress_bar.visibility = View.GONE
                 } else {
                     toast(getString(R.string.metro_stations_list_empty_error))
                     finish()
@@ -99,6 +96,7 @@ class MetroStationsActivity : AppCompatActivity() {
         return true
     }
 
+    // Set up the Recycler View
     private fun populateRecyclerView(list: List<Station>) {
         staggeredLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         stationsList.layoutManager = staggeredLayoutManager
@@ -106,5 +104,8 @@ class MetroStationsActivity : AppCompatActivity() {
         adapter = MetroStationsAdapter(list)
         stationsList.adapter = adapter
         adapter.setOnItemClickListener(onItemClickListener)
+
+        // Hide the ProgressBar
+        stations_progress_bar.visibility = View.GONE
     }
 }

@@ -2,11 +2,9 @@
 MetroWalkDC app
 by Ismayil and Swati
 
-# TODO #
+# Features implemented #
+Support 2 languages (English and Hindi)
 
-* Support 2 languages (English and Hindi)
-
-# DONE #
 Create a custom app launcher icon and include it at multiple resolutions
 
 Support portrait and landscape mode and prevent this rotation from destroying the activity **<- USED for Landmark Details only**
@@ -61,4 +59,4 @@ Handle location runtime permissions properly
 
 Utilize “black box” classes for encapsulating functinoality - (e.g. LocationDetector.kt, PersistanceManager.kt, etc..)
 
-No hard-coded Strings! Use strings.xml
+No hard-coded Strings!

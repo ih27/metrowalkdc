@@ -59,9 +59,6 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             // Restore value of list and populate the view
             recyclerViewList = savedInstanceState.getParcelableArrayList(Constants.LIST_KEY)
             populateRecyclerView(recyclerViewList)
-
-            // Hide the ProgressBar
-            landmarks_progress_bar.visibility = View.GONE
         } else {
             // Check where the user is coming from and call the corresponding function
             if(intent.hasExtra(getString(R.string.landmarks_intent_extra_lat_name))
@@ -121,6 +118,9 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         adapter = LandmarksAdapter(this, list)
         landmarksList.adapter = adapter
         adapter.setOnItemClickListener(onItemClickListener)
+
+        // Hide the ProgressBar
+        landmarks_progress_bar.visibility = View.GONE
     }
 
     // Get the landmarks list and populate the view
@@ -130,11 +130,10 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
         doAsync {
             recyclerViewList = fetchLandmarksManager.fetchLandmarks()
+
             activityUiThread {
                 if (recyclerViewList.isNotEmpty()) {
                     populateRecyclerView(recyclerViewList)
-                    // Hide the ProgressBar
-                    landmarks_progress_bar.visibility = View.GONE
                 } else {
                     val distance = (Constants.RADIUS.toInt() * Constants.MILES_CONVERSION).toInt()
                             toast(String.format(getString(R.string.no_landmark_error, distance)))
@@ -151,11 +150,10 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
 
         doAsync {
             recyclerViewList = persistenceManager.fetchFavorites()
+
             activityUiThread {
                 if (recyclerViewList.isNotEmpty()) {
                     populateRecyclerView(recyclerViewList)
-                    // Hide the ProgressBar
-                    landmarks_progress_bar.visibility = View.GONE
                 } else {
                     toast(getString(R.string.no_favorite_error))
                     finish()

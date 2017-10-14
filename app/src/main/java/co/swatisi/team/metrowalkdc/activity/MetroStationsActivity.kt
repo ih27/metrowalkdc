@@ -31,8 +31,8 @@ class MetroStationsActivity : AppCompatActivity() {
     private val onItemClickListener = object : MetroStationsAdapter.OnItemClickListener {
         override fun onItemClick(view: View, position: Int, filteredList: List<Station>) {
             val intent = Intent(this@MetroStationsActivity, LandmarksActivity::class.java)
-            intent.putExtra("latitude", filteredList[position].lat)
-            intent.putExtra("longitude", filteredList[position].lon)
+            intent.putExtra(getString(R.string.landmarks_intent_extra_lat_name), filteredList[position].lat)
+            intent.putExtra(getString(R.string.landmarks_intent_extra_lon_name), filteredList[position].lon)
             // Start the LandmarksActivity with the coordinates of the selected station
             startActivity(intent)
         }

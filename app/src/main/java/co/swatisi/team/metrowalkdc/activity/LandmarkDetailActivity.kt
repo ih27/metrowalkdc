@@ -31,7 +31,7 @@ class LandmarkDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_landmark_detail)
 
         // Obtain landmark from intent
-        landmark = intent.getParcelableExtra("landmark")
+        landmark = intent.getParcelableExtra(getString(R.string.landmark_detail_intent_extra_name))
 
         // Get the required managers
         persistenceManager = PersistenceManager(this)
@@ -73,7 +73,7 @@ class LandmarkDetailActivity : AppCompatActivity() {
 
     // Set the layout elements
     private fun setLayoutValues() {
-        // Load only if the image URL exists
+        // Load only if the image URL exists, otherwise placeholder is kept
         if (landmark.imageURL.isNotEmpty()) {
             Picasso.with(this).load(landmark.imageURL).into(landmark_detail_image)
         }
@@ -104,7 +104,7 @@ class LandmarkDetailActivity : AppCompatActivity() {
         shareIntent.action = Intent.ACTION_SEND
         shareIntent.type = getString(R.string.share_mime_type)
         shareIntent.putExtra(Intent.EXTRA_TEXT, landmark.textToShare())
-        startActivity(Intent.createChooser(shareIntent, resources.getText(R.string.share_intent_title)))
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_intent_title)))
     }
 
     // General toggle switch for favorite button

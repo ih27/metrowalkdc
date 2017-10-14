@@ -12,6 +12,9 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
+        // Set the title of the activity
+        title = getString(R.string.menu_activity_label)
+
         // Set the listeners for each button clicks
         stations_button.setOnClickListener {
             val intent = Intent(this, MetroStationsActivity::class.java)
@@ -25,7 +28,7 @@ class MenuActivity : AppCompatActivity() {
 
         favorite_landmarks_button.setOnClickListener {
             val intent = Intent(this, LandmarksActivity::class.java)
-            intent.putExtra("favorites", true)
+            intent.putExtra(getString(R.string.favorites_intent_extra_name), true)
             startActivity(intent)
         }
     }

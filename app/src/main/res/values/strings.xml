@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">MetroWalkDC</string>
+    <string name="favorites_intent_extra_name">favorites</string>
+    <string name="landmarks_intent_extra_lat_name">latitude</string>
+    <string name="landmarks_intent_extra_lon_name">longitude</string>
+    <string name="landmark_detail_intent_extra_name">landmark</string>
     <string name="metro_stations">Metro Stations</string>
     <string name="closest_station">Closest Station</string>
     <string name="favorite_landmarks">Favorite Landmarks</string>
@@ -9,8 +13,6 @@
     <string name="landmark_miles_text">%.2f miles away</string>
     <string name="landmark_detail_name">Landmark Name</string>
     <string name="landmark_detail_review">Review: %d</string>
-    <string name="landmark_detail_affordability">Affordability</string>
-    <string name="landmark_detail_type">Landmark Type</string>
     <string name="landmark_detail_phone">Phone Number: %s</string>
     <string name="landmark_detail_website">&lt;a href=\&quot;%s\&quot;>Website&lt;/a></string>
     <string name="landmark_detail_address">Address: %s</string>
@@ -20,10 +22,10 @@
     <string name="share_menu_title">Share</string>
     <string name="share_intent_title">Share the landmark&#8230;</string>
     <string name="share_mime_type">text/plain</string>
-    <string name="landmark_detail_open">OPEN</string>
-    <string name="landmark_detail_closed">CLOSED</string>
-    <string name="directions_error">Google Maps is not installed.</string>
     <string name="landmark_maps_icon_description">Navigate to</string>
+    <string name="station_line_code_1_description">Line Code 1</string>
+    <string name="station_line_code_2_description">Line Code 2</string>
+    <string name="station_line_code_3_description">Line Code 3</string>
     <string name="menu_activity_label">Main Menu</string>
     <string name="metro_stations_activity_label">Metro Stations</string>
     <string name="landmark_detail_activity_label">Landmark Info</string>
@@ -33,15 +35,14 @@
     <string name="landmark_functionality_metro">metro</string>
     <string name="landmark_functionality_favorites">favorites</string>
     <string name="landmark_functionality_closest">closest</string>
-    <string name="station_line_code_1_description">Line Code 1</string>
-    <string name="station_line_code_2_description">Line Code 2</string>
-    <string name="station_line_code_3_description">Line Code 3</string>
+    <string name="directions_error">Google Maps is not installed.</string>
     <string name="metro_stations_list_empty_error">Metro stations list is empty.</string>
     <string name="location_detector_gps_error">Couldn\'t determine GPS status</string>
     <string name="location_detector_network_error">Couldn\'t determine Network location status</string>
+    <string name="location_detector_no_permission_error">Location permission is not granted.</string>
+    <string name="location_detector_timeout_error">Location detector timed out.</string>
     <string name="location_detector_enable_services_message">Please enable the Location Services and try again</string>
     <string name="null_location_error">We have no location.</string>
-    <string name="location_detector_no_permission_error">Location permission is not granted.</string>
-    <string name="location_detector_timeout_error">Location tracker timed out.</string>
-
+    <string name="no_landmark_error">No landmarks within %d mile.</string>
+    <string name="no_favorite_error">You have no favorite landmarks.</string>
 </resources>

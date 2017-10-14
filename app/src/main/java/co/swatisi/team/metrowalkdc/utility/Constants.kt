@@ -16,7 +16,7 @@ object Constants {
     const val YELP_AUTH_CLIENT_SECRET = "rPe3zMFGupFEpScijjUf3i0vqpGruWHpKrN4tJsjnASPeT39vQtT654HLqBHaW2T"
 
     const val YELP_SEARCH_API = "https://api.yelp.com/v3/businesses/search"
-    const val RADIUS = "3200" /* 1 mile = 1600 meters */
+    const val RADIUS = "1600" /* 1 mile = 1600 meters */
     const val CATEGORY = "landmarks"
     const val SORT_BY = "rating"
     const val LIMIT = "10"

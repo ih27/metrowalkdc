@@ -38,9 +38,10 @@ class MetroStationsAdapter(private val stationList: List<Station>) :
         holder?.itemView?.station_name?.text = station.name
 
         // Set the metro line colors
-        /* Kotlin hash maps have no way to null-check */
+        /* Kotlin hash maps have no way to null-check, so non-null operator is used out of necessity */
         holder?.itemView?.station_line_code_1?.drawable?.colorFilter =
                 PorterDuffColorFilter(colorHash[station.lineCode1]!!, PorterDuff.Mode.MULTIPLY)
+
         if (station.lineCode2.isNotBlank())
             holder?.itemView?.station_line_code_2?.drawable?.colorFilter =
                     PorterDuffColorFilter(colorHash[station.lineCode2]!!, PorterDuff.Mode.MULTIPLY)
@@ -84,7 +85,8 @@ class MetroStationsAdapter(private val stationList: List<Station>) :
             }
 
             override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults?) {
-                filteredStationList = filterResults?.values as List<Station> /* no need to check cast*/
+                @Suppress("UNCHECKED_CAST") // The following cast is safe.
+                filteredStationList = filterResults?.values as List<Station>
                 notifyDataSetChanged()
             }
         }

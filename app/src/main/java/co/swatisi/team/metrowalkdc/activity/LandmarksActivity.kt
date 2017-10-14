@@ -40,7 +40,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
         override fun onItemClick(view: View, position: Int) {
             val intent = Intent(this@LandmarksActivity, LandmarkDetailActivity::class.java)
             val landmark = recyclerViewList[position]
-            intent.putExtra("landmark", landmark)
+            intent.putExtra(getString(R.string.landmark_detail_intent_extra_name), landmark)
             // Start the LandmarkDetailActivity with the selected landmark passed
             startActivity(intent)
         }
@@ -64,17 +64,23 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
             landmarks_progress_bar.visibility = View.GONE
         } else {
             // Check where the user is coming from and call the corresponding function
-            if(intent.hasExtra("latitude") || intent.hasExtra("longitude")) {
+            if(intent.hasExtra(getString(R.string.landmarks_intent_extra_lat_name))
+                    || intent.hasExtra(getString(R.string.landmarks_intent_extra_lon_name))) {
+                // User is coming from MetroStations activity
                 functionality = getString(R.string.landmark_functionality_metro)
                 supportActionBar?.title = getString(R.string.metro_station_landmarks_activity_label)
-                val metroLat = intent.getDoubleExtra("latitude", 0.0)
-                val metroLon = intent.getDoubleExtra("longitude", 0.0)
+                val metroLat = intent.getDoubleExtra(getString(R.string.landmarks_intent_extra_lat_name),
+                        0.0)
+                val metroLon = intent.getDoubleExtra(getString(R.string.landmarks_intent_extra_lon_name),
+                        0.0)
                 getLandmarksAndShow(metroLat, metroLon)
-            } else if(intent.hasExtra("favorites")) {
+            } else if(intent.hasExtra(getString(R.string.favorites_intent_extra_name))) {
+                // User is coming from Menu activity with the favorites button clicked
                 functionality = getString(R.string.landmark_functionality_favorites)
                 supportActionBar?.title = getString(R.string.favorites_landmarks_activity_label)
                 getFavoritesAndShow()
             } else {
+                // User is coming from Menu activity with the closest station button clicked
                 functionality = getString(R.string.landmark_functionality_closest)
                 supportActionBar?.title = getString(R.string.closest_station_landmarks_activity_label)
 
@@ -130,8 +136,8 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
                     // Hide the ProgressBar
                     landmarks_progress_bar.visibility = View.GONE
                 } else {
-                    val distance = (Constants.RADIUS.toInt() * Constants.MILES_CONVERSION).toInt().toString()
-                            toast("No landmarks within $distance miles.")
+                    val distance = (Constants.RADIUS.toInt() * Constants.MILES_CONVERSION).toInt()
+                            toast(String.format(getString(R.string.no_landmark_error, distance)))
                     finish()
                 }
             }
@@ -151,7 +157,7 @@ class LandmarksActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissio
                     // Hide the ProgressBar
                     landmarks_progress_bar.visibility = View.GONE
                 } else {
-                    toast("No favorites to show.")
+                    toast(getString(R.string.no_favorite_error))
                     finish()
                 }
             }

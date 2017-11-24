@@ -7,13 +7,13 @@ object Constants {
 
     // WMATA API related constants
     const val METRO_API = "https://api.wmata.com/Rail.svc/json/jStations"
-    const val METRO_API_TOKEN = "372279dd0fae484ea9c426f476031703"
+    const val METRO_API_TOKEN = "WRITE-YOUR-OWN-KEY"
 
     // YELP Fusion API related constants
     const val YELP_AUTH_API = "https://api.yelp.com/oauth2/token"
     const val YELP_AUTH_GRANT_TYPE = "client_credentials"
-    const val YELP_AUTH_CLIENT_ID = "09NkI49HqwqCyVkn4Te6uA"
-    const val YELP_AUTH_CLIENT_SECRET = "rPe3zMFGupFEpScijjUf3i0vqpGruWHpKrN4tJsjnASPeT39vQtT654HLqBHaW2T"
+    const val YELP_AUTH_CLIENT_ID = "WRITE-YOUR-OWN-KEY"
+    const val YELP_AUTH_CLIENT_SECRET = "WRITE-YOUR-OWN-KEY"
 
     const val YELP_SEARCH_API = "https://api.yelp.com/v3/businesses/search"
     const val RADIUS = "1600" /* 1 mile = 1600 meters */
